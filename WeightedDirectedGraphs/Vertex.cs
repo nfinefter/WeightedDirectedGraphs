@@ -13,7 +13,7 @@ namespace WeightedDirectedGraphs
 
         public Vertex(T value) 
         {
-        
+            
         }
     }
 }
