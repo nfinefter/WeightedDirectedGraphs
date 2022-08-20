@@ -12,7 +12,9 @@ namespace WeightedDirectedGraphs
 
         public Edge(Vertex<T> startingPoint, Vertex<T> endingPoint, float distance)
         {
-
+            StartingPoint = startingPoint;
+            EndingPoint = endingPoint;
+            Distance = distance;
         }
     }
 }
