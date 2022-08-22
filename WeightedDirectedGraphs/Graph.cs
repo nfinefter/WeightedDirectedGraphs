@@ -151,7 +151,8 @@ namespace WeightedDirectedGraphs
 
         public List<Vertex<T>> BFS(Vertex<T> start, Vertex<T> end)
         {
-            //FIX BFS
+            //FIX BFS not showing correct path
+            //Fixed I think
             List<Vertex<T>> path = new List<Vertex<T>>();
 
             Vertex<T> temp = start;
@@ -169,7 +170,7 @@ namespace WeightedDirectedGraphs
                 }
             }
             temp = end;
-            while (temp != null)
+            while (temp != null && !path.Contains(temp))
             {
                 path.Add(temp);
                 temp = temp.Parent;
