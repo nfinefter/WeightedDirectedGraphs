@@ -9,39 +9,36 @@ namespace WeightedDirectedGraphs
         {
             Graph<string> graph = new Graph<string>();
 
-            Vertex<string> vertex = new Vertex<string>("LAX");
+            Vertex<string> LAX = new Vertex<string>("LAX");
 
-            graph.AddVertex(vertex);
+            graph.AddVertex(LAX);
 
-            Vertex<string> vertex1 = new Vertex<string>("AUS");
-            graph.AddVertex(vertex1);
-            Vertex<string> vertex2 = new Vertex<string>("SEA");
-            graph.AddVertex(vertex2);
-            Vertex<string> vertex3 = new Vertex<string>("LOG");
-            graph.AddVertex(vertex3);
-            Vertex<string> vertex4 = new Vertex<string>("JFK");
-            graph.AddVertex(vertex4);
-            Vertex<string> vertex5 = new Vertex<string>("ABA");
-            graph.AddVertex(vertex5);
-            
+            Vertex<string> AUS = new Vertex<string>("AUS");
+            graph.AddVertex(AUS);
+            Vertex<string> SEA = new Vertex<string>("SEA");
+            graph.AddVertex(SEA);
+            Vertex<string> LOG = new Vertex<string>("LOG");
+            graph.AddVertex(LOG);
+            Vertex<string> JFK = new Vertex<string>("JFK");
+            graph.AddVertex(JFK);
+            Vertex<string> bestband = new Vertex<string>("ABA");
+            graph.AddVertex(bestband);
 
-            graph.AddEdge(vertex1, vertex2, 5);
-            graph.AddEdge(vertex2, vertex4, 5);
-            graph.AddEdge(vertex3, vertex5, 5);
-            graph.AddEdge(vertex2, vertex1, 5);
-            //graph.AddEdge(vertex5, vertex1, 5);
-
-            //Edge<string> temp = graph.GetEdge(vertex1, vertex4);
+            graph.AddEdge(AUS, SEA, 5);
+            graph.AddEdge(AUS, bestband, 1000);
+            graph.AddEdge(bestband, AUS, 100);
+            graph.AddEdge(bestband, SEA, 2);
+           
+            graph.AddEdge(SEA, JFK, 5);
+            graph.AddEdge(LOG, bestband, 5);
+            graph.AddEdge(SEA, AUS, 5);
                 
-            List<Vertex<string>> items = graph.DepthFirstSearch(vertex1, vertex4);
+            List<Vertex<string>> items = graph.DepthFirstSearch(AUS, JFK);
 
             for (int i = 0; i < items.Count; i++)
             {
                 Console.WriteLine(items[i].Value);
             }
-            
-
-            graph.RemoveVertex(vertex3);
         }
     }
 }

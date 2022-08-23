@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace WeightedDirectedGraphs
@@ -132,9 +133,6 @@ namespace WeightedDirectedGraphs
 
         public List<Vertex<T>> BFS(Vertex<T> start, Vertex<T> end)
         {
-            //FIX BFS not showing correct path
-            //Fixed I think
-            //Also added DFS check for bugs
             List<Vertex<T>> path = new List<Vertex<T>>();
 
             Vertex<T> temp = start;
@@ -164,16 +162,20 @@ namespace WeightedDirectedGraphs
         }
         public List<Vertex<T>> DepthFirstSearch(Vertex<T> start, Vertex<T> end) // T[]
         {
-            Stack<Vertex<T>> vertices = new Stack<Vertex<T>>();
-            vertices.Push(start);
+            List<Vertex<T>> vertices = new List<Vertex<T>>();
+            vertices.Add(start);
 
             Vertex<T> cursor;
 
             Dictionary<Vertex<T>, Vertex<T>> Founders = new Dictionary<Vertex<T>, Vertex<T>>();
 
+            Founders.Add(start, null);
+
             while (vertices.Count > 0)
             {
-                cursor = vertices.Pop();
+                cursor = vertices[vertices.Count - 1];
+
+                vertices.RemoveAt(vertices.Count - 1);
 
                 if (cursor == end)
                 {
@@ -182,10 +184,21 @@ namespace WeightedDirectedGraphs
 
                 foreach (Edge<T> Neighbor in cursor.Neighbors)
                 {
+                    //if (!Founders.ContainsKey(Neighbor.EndingPoint))
+                    //{
+                    //    vertices.Push(Neighbor.EndingPoint);
+                    //    Founders.Add(Neighbor.EndingPoint, cursor);
+                    //}
                     if (!Founders.ContainsKey(Neighbor.EndingPoint))
-                    {
-                        vertices.Push(Neighbor.EndingPoint);
+                    {                        
+                        vertices.Add(Neighbor.EndingPoint);
                         Founders.Add(Neighbor.EndingPoint, cursor);
+                    }
+                    else if (vertices.Contains(Neighbor.EndingPoint))
+                    {
+                        vertices.Remove(Neighbor.EndingPoint);
+                        vertices.Add(Neighbor.EndingPoint);
+                        Founders[Neighbor.EndingPoint] = cursor;
                     }
                 }
             }
@@ -200,27 +213,26 @@ namespace WeightedDirectedGraphs
         {
             List<Vertex<T>> path = new List<Vertex<T>>();
 
-            while (cursor != start)
+            while (cursor != null)
             {
-                if (Founders.ContainsKey(cursor))
-                {
-                    path.Add(cursor);
 
-                    cursor = Founders[cursor];
-                }
-                else
-                {
-                    break;
-                }
+                path.Add(cursor);
+
+                cursor = Founders[cursor];
+
+
             }
-
-            path.Add(start);
 
             path.Reverse();
 
             return path;
 
         }
+        public List<Vertex<T>> Djikstra()
+        {
+            //BFS with distance
 
+            return new List<Vertex<T>>();
+        }
     }
 }
