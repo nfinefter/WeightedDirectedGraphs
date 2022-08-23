@@ -32,8 +32,8 @@ namespace WeightedDirectedGraphs
             //graph.AddEdge(vertex5, vertex1, 5);
 
             //Edge<string> temp = graph.GetEdge(vertex1, vertex4);
-
-            List<Vertex<string>> items = graph.BFS(vertex1, vertex4);
+                
+            List<Vertex<string>> items = graph.DepthFirstSearch(vertex1, vertex4);
 
             for (int i = 0; i < items.Count; i++)
             {
