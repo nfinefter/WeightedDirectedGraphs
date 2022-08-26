@@ -228,7 +228,7 @@ namespace WeightedDirectedGraphs
             return path;
 
         }
-        public List<Vertex<T>> Djikstra()
+        public List<Vertex<T>> Djikstra(Vertex<T> start)
         {
             //BFS with distance
 

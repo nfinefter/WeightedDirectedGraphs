@@ -39,6 +39,9 @@ namespace WeightedDirectedGraphs
             {
                 Console.WriteLine(items[i].Value);
             }
+
+           
+
         }
     }
 }

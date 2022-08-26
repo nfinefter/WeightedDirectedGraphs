@@ -15,6 +15,7 @@ namespace WeightedDirectedGraphs
         {
             Neighbors = new List<Edge<T>>();
             Value = value;
+            Parent = null;
         }
 
         public override string ToString()
