@@ -8,13 +8,13 @@ namespace WeightedDirectedGraphs
     {
         public Vertex<T> StartingPoint { get; set; }
         public Vertex<T> EndingPoint { get; set; }
-        public float Distance { get; set; }
+        public float Weight { get; set; }
 
         public Edge(Vertex<T> startingPoint, Vertex<T> endingPoint, float distance)
         {
             StartingPoint = startingPoint;
             EndingPoint = endingPoint;
-            Distance = distance;
+            Weight = distance;
             //how to make distance infinity
         }
     }

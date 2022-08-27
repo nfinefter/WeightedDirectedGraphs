@@ -1,12 +1,16 @@
-﻿using System;
+﻿using Heap_Tree;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 
 namespace WeightedDirectedGraphs
 {
     class Graph<T> where T : IComparable<T>
     {
+        
         private List<Vertex<T>> vertices = new List<Vertex<T>>();
 
         public IReadOnlyList<Vertex<T>> Vertices => vertices;
@@ -37,7 +41,7 @@ namespace WeightedDirectedGraphs
 
         public Graph()
         {
-
+            
         }
         public void AddVertex(Vertex<T> vertex)
         {
@@ -228,11 +232,67 @@ namespace WeightedDirectedGraphs
             return path;
 
         }
-        public List<Vertex<T>> Djikstra(Vertex<T> start)
+        public List<Vertex<T>> Djikstra(Graph<T> graph, Vertex<T> start, Vertex<T> end)
         {
-            //BFS with distance
+            Heap<Vertex<T>> queue = new Heap<Vertex<T>>(5);
 
-            return new List<Vertex<T>>();
+            List<Vertex<T>> path = new List<Vertex<T>>();
+
+            Vertex<T> temp = start;
+
+            temp.Distance = 0;
+                
+            queue.Push(temp);
+
+            Vertex<T> vertex;
+
+            while (end.Visited == false)
+            {
+                vertex = queue.Pop();
+
+                //Crashes because distance is infiniy?
+                //Make the distances 0?
+                
+
+                for (int i = 0; i < vertex.NeighborCount; i++)
+                {  
+                    if (vertex.Neighbors[i].EndingPoint.Visited == true)
+                    {
+                        float tentDist = vertex.Distance + vertex.Neighbors[i].Weight;
+                        if (tentDist.CompareTo(vertex.Distance + vertex.Neighbors[i].Weight) < 0)
+                        {
+                            vertex.Neighbors[i].EndingPoint.Distance = tentDist;
+                            if (vertex.Neighbors[i].EndingPoint.Visited != true)
+                            {
+                                vertex.Neighbors[i].EndingPoint.Parent = vertex;
+                            }
+                        } 
+                    }
+                }
+
+                for (int i = 0; i < vertex.NeighborCount; i++)
+                {
+                    if (vertex.Neighbors[i].EndingPoint.Visited == false || !queue.Contains(vertex.Neighbors[i].EndingPoint))
+                    {
+                        queue.Push(vertex.Neighbors[i].EndingPoint);
+                    }
+                }
+                vertex.Visited = true;
+                
+            }
+
+            if (end.Visited == true)
+            {
+                Vertex<T> finder = end;
+
+                while (finder.Parent != null)
+                {
+                    path.Add(finder);
+                    finder = finder.Parent;
+                }
+            }
+
+            return path;
         }
     }
 }

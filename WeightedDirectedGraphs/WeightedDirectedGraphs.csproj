@@ -5,4 +5,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Heap-Tree\Heap Tree\Heap Tree.csproj" />
+  </ItemGroup>
+
 </Project>

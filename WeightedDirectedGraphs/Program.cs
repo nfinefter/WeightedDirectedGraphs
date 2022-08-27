@@ -33,14 +33,12 @@ namespace WeightedDirectedGraphs
             graph.AddEdge(LOG, bestband, 5);
             graph.AddEdge(SEA, AUS, 5);
                 
-            List<Vertex<string>> items = graph.DepthFirstSearch(AUS, JFK);
-
+            List<Vertex<string>> items = graph.Djikstra(graph, AUS, JFK);
+            
             for (int i = 0; i < items.Count; i++)
             {
                 Console.WriteLine(items[i].Value);
             }
-
-           
 
         }
     }
