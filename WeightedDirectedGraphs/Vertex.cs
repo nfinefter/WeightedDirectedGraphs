@@ -30,7 +30,7 @@ namespace WeightedDirectedGraphs
 
         public int CompareTo(Vertex<T> other)
         {
-            
+            //Crashes because SEA distance is infinity.
             if (other.Distance.Equals(Distance))
             {
                 return 0;
