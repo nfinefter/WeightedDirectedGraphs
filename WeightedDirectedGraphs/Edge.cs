@@ -15,7 +15,6 @@ namespace WeightedDirectedGraphs
             StartingPoint = startingPoint;
             EndingPoint = endingPoint;
             Weight = distance;
-            //how to make distance infinity
         }
     }
 }

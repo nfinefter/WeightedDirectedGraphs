@@ -10,7 +10,7 @@ namespace WeightedDirectedGraphs
 {
     class Graph<T> where T : IComparable<T>
     {
-        
+
         private List<Vertex<T>> vertices = new List<Vertex<T>>();
 
         public IReadOnlyList<Vertex<T>> Vertices => vertices;
@@ -41,7 +41,7 @@ namespace WeightedDirectedGraphs
 
         public Graph()
         {
-            
+
         }
         public void AddVertex(Vertex<T> vertex)
         {
@@ -194,7 +194,7 @@ namespace WeightedDirectedGraphs
                     //    Founders.Add(Neighbor.EndingPoint, cursor);
                     //}
                     if (!Founders.ContainsKey(Neighbor.EndingPoint))
-                    {                        
+                    {
                         vertices.Add(Neighbor.EndingPoint);
                         Founders.Add(Neighbor.EndingPoint, cursor);
                     }
@@ -232,6 +232,14 @@ namespace WeightedDirectedGraphs
             return path;
 
         }
+        public List<Vertex<T>> AStar(Vertex<T> start, Vertex<T> end)
+        {
+            List<Vertex<T>> path = new List<Vertex<T>>();
+
+
+
+            return path;
+        }
         public List<Vertex<T>> Djikstra(Vertex<T> start, Vertex<T> end)
         {
             Heap<Vertex<T>> queue = new Heap<Vertex<T>>(5);
@@ -251,15 +259,12 @@ namespace WeightedDirectedGraphs
 
                 Vertex<T> vertex = queue.Pop();
 
-                //Crashes because distance is infiniy?
-                //Make the distances 0?              
-
                 for (int i = 0; i < vertex.NeighborCount; i++)
-                {  
+                {
                     if (vertex.Neighbors[i].EndingPoint.Visited != true)
                     {
                         float tentDist = vertex.CumulativeDistance + vertex.Neighbors[i].Weight;
-                        
+
                         if (tentDist.CompareTo(vertex.Neighbors[i].EndingPoint.CumulativeDistance) < 0)
                         {
                             vertex.Neighbors[i].EndingPoint.CumulativeDistance = tentDist;
@@ -277,13 +282,13 @@ namespace WeightedDirectedGraphs
                             }
 
                             vertex.Neighbors[i].EndingPoint.Founder = vertex;
-                            
-                        } 
+
+                        }
                     }
                 }
 
                 vertex.Visited = true;
-                
+
             }
 
             if (end.Visited == true)
@@ -300,5 +305,7 @@ namespace WeightedDirectedGraphs
 
             return path;
         }
+
     }
+  
 }
