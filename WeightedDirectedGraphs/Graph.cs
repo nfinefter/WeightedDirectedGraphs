@@ -150,14 +150,14 @@ namespace WeightedDirectedGraphs
                 for (int i = 0; i < temp.NeighborCount; i++)
                 {
                     vertices.Enqueue(temp.Neighbors[i].EndingPoint);
-                    temp.Neighbors[i].EndingPoint.Parent = temp;
+                    temp.Neighbors[i].EndingPoint.Founder = temp;
                 }
             }
             temp = end;
             while (temp != null && !path.Contains(temp))
             {
                 path.Add(temp);
-                temp = temp.Parent;
+                temp = temp.Founder;
             }
 
             path.Reverse();
@@ -232,51 +232,56 @@ namespace WeightedDirectedGraphs
             return path;
 
         }
-        public List<Vertex<T>> Djikstra(Graph<T> graph, Vertex<T> start, Vertex<T> end)
+        public List<Vertex<T>> Djikstra(Vertex<T> start, Vertex<T> end)
         {
             Heap<Vertex<T>> queue = new Heap<Vertex<T>>(5);
 
             List<Vertex<T>> path = new List<Vertex<T>>();
 
-            Vertex<T> temp = start;
+            start.CumulativeDistance = 0;
 
-            temp.Distance = 0;
-                
-            queue.Push(temp);
-
-            Vertex<T> vertex;
+            queue.Push(start);
 
             while (end.Visited == false)
             {
-                vertex = queue.Pop();
+                if (queue.Count == 0)
+                {
+                    return path;
+                }
+
+                Vertex<T> vertex = queue.Pop();
 
                 //Crashes because distance is infiniy?
-                //Make the distances 0?
-                
+                //Make the distances 0?              
 
                 for (int i = 0; i < vertex.NeighborCount; i++)
                 {  
-                    if (vertex.Neighbors[i].EndingPoint.Visited == true)
+                    if (vertex.Neighbors[i].EndingPoint.Visited != true)
                     {
-                        float tentDist = vertex.Distance + vertex.Neighbors[i].Weight;
-                        if (tentDist.CompareTo(vertex.Distance + vertex.Neighbors[i].Weight) < 0)
+                        float tentDist = vertex.CumulativeDistance + vertex.Neighbors[i].Weight;
+                        
+                        if (tentDist.CompareTo(vertex.Neighbors[i].EndingPoint.CumulativeDistance) < 0)
                         {
-                            vertex.Neighbors[i].EndingPoint.Distance = tentDist;
-                            if (vertex.Neighbors[i].EndingPoint.Visited != true)
+                            vertex.Neighbors[i].EndingPoint.CumulativeDistance = tentDist;
+
+                            int temp = queue.Find(vertex.Neighbors[i].EndingPoint);
+
+                            if (temp == -1)
                             {
-                                vertex.Neighbors[i].EndingPoint.Parent = vertex;
+                                queue.Push(vertex.Neighbors[i].EndingPoint);
                             }
+
+                            else
+                            {
+                                queue.HeapifyUp(temp);
+                            }
+
+                            vertex.Neighbors[i].EndingPoint.Founder = vertex;
+                            
                         } 
                     }
                 }
 
-                for (int i = 0; i < vertex.NeighborCount; i++)
-                {
-                    if (vertex.Neighbors[i].EndingPoint.Visited == false || !queue.Contains(vertex.Neighbors[i].EndingPoint))
-                    {
-                        queue.Push(vertex.Neighbors[i].EndingPoint);
-                    }
-                }
                 vertex.Visited = true;
                 
             }
@@ -285,11 +290,12 @@ namespace WeightedDirectedGraphs
             {
                 Vertex<T> finder = end;
 
-                while (finder.Parent != null)
+                while (finder != null)
                 {
                     path.Add(finder);
-                    finder = finder.Parent;
+                    finder = finder.Founder;
                 }
+                path.Reverse();
             }
 
             return path;

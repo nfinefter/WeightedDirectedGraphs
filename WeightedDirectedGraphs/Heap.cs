@@ -10,14 +10,13 @@ namespace Heap_Tree
         public int Count { get; private set; }
         public int Capacity { get { return items.Length; } }
 
-        public Heap(int capacity)
+        public Heap(int capacity)//max heap
         {
             items = new T[capacity];
         }
 
         public void Push(T item)
         {
-            
             //resize if the array is full
             if (Count >= items.Length)
             {
@@ -125,14 +124,19 @@ namespace Heap_Tree
         }
         public bool Contains(T item)
         {
+            return Find(item) != -1;
+            
+        }
+        public int Find(T item)
+        {
             for (int i = 0; i < items.Length; i++)
             {
                 if (items.Equals(item))
                 {
-                    return true;
+                    return i;
                 }
             }
-            return false;
+            return -1;
         }
     }
 }

@@ -12,15 +12,15 @@ namespace WeightedDirectedGraphs
         public List<Edge<T>> Neighbors { get; set; }
 
         public int NeighborCount => Neighbors.Count;
-        public Vertex<T> Parent;
+        public Vertex<T> Founder;
         public bool Visited = false;
-        public float Distance = float.PositiveInfinity;
+        public float CumulativeDistance = float.PositiveInfinity;
 
         public Vertex(T value) 
         {
             Neighbors = new List<Edge<T>>();
             Value = value;
-            Parent = null;
+            Founder = null;
         }
 
         public override string ToString()
@@ -30,20 +30,19 @@ namespace WeightedDirectedGraphs
 
         public int CompareTo(Vertex<T> other)
         {
-            //Crashes because SEA distance is infinity.
-            if (other.Distance.Equals(Distance))
+            if (other.CumulativeDistance.Equals(CumulativeDistance))
             {
                 return 0;
             }
-            if (other.Distance < Distance)
+            if (other.CumulativeDistance > CumulativeDistance)
             {
                 return 1;
             }
-            if (other.Distance > Distance)
+            if (other.CumulativeDistance < CumulativeDistance)
             {
                 return -1;
             }
-
+            //Flipped CompareTo because Heap is Max-Heap
             return 0;
         }
     }
