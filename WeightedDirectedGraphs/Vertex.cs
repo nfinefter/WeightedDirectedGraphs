@@ -15,7 +15,8 @@ namespace WeightedDirectedGraphs
         public Vertex<T> Founder;
         public bool Visited = false;
         public float CumulativeDistance = float.PositiveInfinity;
-       
+        public float FinalDistance = float.PositiveInfinity;
+
         public float X;
         public float Y;
 
