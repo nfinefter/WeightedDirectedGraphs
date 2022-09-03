@@ -1,16 +1,23 @@
 ﻿using Heap_Tree;
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
+using System.Xml.Linq;
 
 namespace WeightedDirectedGraphs
 {
-    class Graph<T> where T : IComparable<T>
+    public enum HeuristicsChoices
     {
-
+        Manhattan,
+        Diagonal,
+        Euclidean
+    }
+    public class Graph<T>
+    {
         private List<Vertex<T>> vertices = new List<Vertex<T>>();
 
         public IReadOnlyList<Vertex<T>> Vertices => vertices;
@@ -103,7 +110,7 @@ namespace WeightedDirectedGraphs
             int count = -1;
             for (int i = 0; i < vertices.Count; i++)
             {
-                if (value.CompareTo(vertices[i].Value) == 0)
+                if (value.Equals(vertices[i].Value))
                 {
                     count = i;
                     break;
@@ -232,68 +239,7 @@ namespace WeightedDirectedGraphs
             return path;
 
         }
-        public float Heuristics(Vertex<T> start, Vertex<T> end)
-        {
-            float dx = Math.Abs(start.X - end.X);
-            float dy = Math.Abs(start.Y - end.Y);
-            return (dx + dy);
-        }
-
-        public List<Vertex<T>> AStar(Vertex<T> start, Vertex<T> end)
-        {
-            List<Vertex<T>> path = new List<Vertex<T>>();
-            Heap<Vertex<T>> queue = new Heap<Vertex<T>>(5);
-
-            start.CumulativeDistance = 0;
-            //How to use heuristics function
-
-            queue.Push(start);
-
-            while (end.Visited == false)
-            {
-                if (queue.Count == 0)
-                {
-                    return path;
-                }
-
-                Vertex<T> vertex = queue.Pop();
-
-                for (int i = 0; i < vertex.NeighborCount; i++)
-                {
-                    if (vertex.Neighbors[i].EndingPoint.Visited != true)
-                    {
-                        float tentDist = vertex.CumulativeDistance + vertex.Neighbors[i].Weight;
-
-                        if (tentDist.CompareTo(vertex.Neighbors[i].EndingPoint.CumulativeDistance) < 0)
-                        {
-                            vertex.Neighbors[i].EndingPoint.CumulativeDistance = tentDist;
-
-                            vertex.Neighbors[i].EndingPoint.FinalDistance = tentDist + Heuristics(vertex.Neighbors[i].EndingPoint, end);
-                            //does this work for final distance?
-
-                            int temp = queue.Find(vertex.Neighbors[i].EndingPoint);
-
-                            if (temp == -1)
-                            {
-                                queue.Push(vertex.Neighbors[i].EndingPoint);
-                            }
-
-                            else
-                            {
-                                queue.HeapifyUp(temp);
-                            }
-
-                            vertex.Neighbors[i].EndingPoint.Founder = vertex;
-
-
-
-                        }
-                    }
-                }
-            }
-
-            return path;
-        }
+       
         public List<Vertex<T>> Djikstra(Vertex<T> start, Vertex<T> end)
         {
             Heap<Vertex<T>> queue = new Heap<Vertex<T>>(5);

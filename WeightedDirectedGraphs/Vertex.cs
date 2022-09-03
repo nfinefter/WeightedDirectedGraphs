@@ -6,7 +6,7 @@ using System.Text;
 
 namespace WeightedDirectedGraphs
 {
-    class Vertex<T> : IComparable<Vertex<T>>
+    public class Vertex<T> : IComparable<Vertex<T>>
     {
         public T Value { get; set; }
         public List<Edge<T>> Neighbors { get; set; }
@@ -16,22 +16,16 @@ namespace WeightedDirectedGraphs
         public bool Visited = false;
         public float CumulativeDistance = float.PositiveInfinity;
         public float FinalDistance = float.PositiveInfinity;
-
-        public float X;
-        public float Y;
-
         public Vertex(T value) 
         {
             Neighbors = new List<Edge<T>>();
             Value = value;
             Founder = null;
         }
-
         public override string ToString()
         {
             return Value.ToString();
         }
-
         public int CompareTo(Vertex<T> other)
         {
             if (other.CumulativeDistance.Equals(CumulativeDistance))
