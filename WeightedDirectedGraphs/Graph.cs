@@ -50,6 +50,7 @@ namespace WeightedDirectedGraphs
         {
 
         }
+        
         public void AddVertex(Vertex<T> vertex)
         {
             if (vertex != null || vertex.NeighborCount != 0 || !vertices.Contains(vertex))
@@ -105,6 +106,7 @@ namespace WeightedDirectedGraphs
 
             return false;
         }
+        
         public Vertex<T> Search(T value)
         {
             int count = -1;
@@ -122,6 +124,7 @@ namespace WeightedDirectedGraphs
             }
             return vertices[count];
         }
+
         public Edge<T> GetEdge(Vertex<T> a, Vertex<T> b)
         {
 

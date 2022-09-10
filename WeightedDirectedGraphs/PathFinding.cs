@@ -8,43 +8,44 @@ namespace WeightedDirectedGraphs
 {
     public static class PathFinding
     {
-        static float Heuristics(Point start, Point end, HeuristicsChoices heuristicsChoices, float D, float D2 = 0)
+        static float Heuristics(Point start, Point end, HeuristicsChoices heuristicsChoices)
         {
             if (heuristicsChoices == HeuristicsChoices.Manhattan)
             {
-                return Manhattan(start, end, D);
+                return Manhattan(start, end);
             }
             if (heuristicsChoices == HeuristicsChoices.Diagonal)
             {
-                return Diagonal(start, end, D, D2);
+                return Diagonal(start, end);
             }
             if (heuristicsChoices == HeuristicsChoices.Euclidean)
             {
-                return Euclidean(start, end, D);
+                return Euclidean(start, end);
             }
 
             throw new Exception("Choice of heuristics algorithm not given!");
         }
-        static float Manhattan(Point start, Point end, float D)
+
+        static float Manhattan(Point start, Point end)
         {
             float dx = Math.Abs(start.X - end.X);
             float dy = Math.Abs(start.Y - end.Y);
-            return D * (dx + dy);
+            return 1 * (dx + dy);
         }
-        static float Diagonal(Point start, Point end, float D, float D2)
+        static float Diagonal(Point start, Point end)
         {
             float dx = Math.Abs(start.X - end.X);
             float dy = Math.Abs(start.Y - end.Y);
-            return D * (dx + dy) + (D2 - 2 * D) * Math.Min(dx, dy);
+            return 1 * (dx + dy) + (1 - 2 * 1) * Math.Min(dx, dy);
         }
-        static float Euclidean(Point start, Point end, float D)
+        static float Euclidean(Point start, Point end)
         {
             float dx = Math.Abs(start.X - end.X);
             float dy = Math.Abs(start.Y - end.Y);
-            return D * (float)Math.Sqrt(dx * dx + dy * dy);
+            return 1 * (float)Math.Sqrt(dx * dx + dy * dy);
         }
 
-        public static List<Vertex<Point>> AStar(Graph<Point> graph, Point start, Point end, HeuristicsChoices heuristicsChoice, float D, float D2 = 0)
+        public static List<Vertex<Point>> AStar(Graph<Point> graph, Point start, Point end, HeuristicsChoices heuristicsChoice)
         {
             List<Vertex<Point>> path = new List<Vertex<Point>>();
             Heap<Vertex<Point>> queue = new Heap<Vertex<Point>>(5);
@@ -54,8 +55,7 @@ namespace WeightedDirectedGraphs
 
             Start.CumulativeDistance = 0;
 
-            //How to use heuristics function
-            Start.FinalDistance = Heuristics(start, end, heuristicsChoice, D, D2);
+            Start.FinalDistance = Heuristics(start, end, heuristicsChoice);
 
             queue.Push(Start);
 
@@ -78,11 +78,10 @@ namespace WeightedDirectedGraphs
                         {
                             vertex.Neighbors[i].EndingPoint.CumulativeDistance = tentDist;
 
-                            vertex.Neighbors[i].EndingPoint.FinalDistance = tentDist + Heuristics(vertex.Neighbors[i].EndingPoint.Value, end, heuristicsChoice, D, D2);
-                            //does this work for final distance?
+                            vertex.Neighbors[i].EndingPoint.FinalDistance = tentDist + Heuristics(vertex.Neighbors[i].EndingPoint.Value, end, heuristicsChoice);
 
                             int temp = queue.Find(vertex.Neighbors[i].EndingPoint);
-                            //Queue never finds the vertex so it pushes twice.
+
                             if (temp == -1)
                             {
                                 queue.Push(vertex.Neighbors[i].EndingPoint);
@@ -98,6 +97,20 @@ namespace WeightedDirectedGraphs
                         }
                     }
                 }
+
+                vertex.Visited = true;
+            }
+
+            if (End.Visited == true)
+            {
+                Vertex<Point> finder = End;
+
+                while (finder != null)
+                {
+                    path.Add(finder);
+                    finder = finder.Founder;
+                }
+                path.Reverse();
             }
 
             return path;
