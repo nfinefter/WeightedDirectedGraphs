@@ -42,13 +42,15 @@ namespace WeightedDirectedGraphs
 
                     if (x >= 0 && y >= 0)
                     {
-                     
                             Vertex<Point> prevX = graph.Search(new Point(x - 1, y));
                             graph.AddEdge(prevX, temp, 1);
+                        graph.AddEdge(temp, prevX, 1);    
 
                             Vertex<Point> prevY = graph.Search(new Point(x, y - 1));
                             graph.AddEdge(prevY, temp, 1);
+                        graph.AddEdge(temp, prevY, 1);
 
+                            
                     }
                 }
             }
@@ -56,12 +58,19 @@ namespace WeightedDirectedGraphs
             Console.WriteLine("0: Manhattan, 1: Diagonal, 2: Euclidean");
             int heuristicsChoice = int.Parse(Console.ReadLine());
 
-            List<Vertex<Point>> items = PathFinding.AStar(graph, new Point(3, 4), new Point(0, 0), (HeuristicsChoices)heuristicsChoice);
+            //turn heuristicsChoice into variable for Pathfinding.Manhattan
+
+            PathFinding.Result result = PathFinding.AStar(out var items, graph, new Point(3, 4), new Point(0, 0), PathFinding.Manhattan);
             //Not able to search backwards from Example: (3,4) to (0,0)
 
-            for (int i = 0; i < items.Count; i++)
+            Console.WriteLine(result.ToString());
+
+            if (result == PathFinding.Result.Found)
             {
-                Console.WriteLine(items[i].Value);
+                for (int i = 0; i < items.Count; i++)
+                {
+                    Console.WriteLine(items[i].Value);
+                }
             }
 
         }

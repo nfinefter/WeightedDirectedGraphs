@@ -8,6 +8,15 @@ namespace WeightedDirectedGraphs
 {
     public static class PathFinding
     {
+        public enum Result
+        {
+            Found,
+            NotFound,
+            InvalidPos
+        }
+        
+        //Turn into actions and have it return the action.
+
         static float Heuristics(Point start, Point end, HeuristicsChoices heuristicsChoices)
         {
             if (heuristicsChoices == HeuristicsChoices.Manhattan)
@@ -26,7 +35,7 @@ namespace WeightedDirectedGraphs
             throw new Exception("Choice of heuristics algorithm not given!");
         }
 
-        static float Manhattan(Point start, Point end)
+        public static float Manhattan(Point start, Point end)
         {
             float dx = Math.Abs(start.X - end.X);
             float dy = Math.Abs(start.Y - end.Y);
@@ -44,26 +53,34 @@ namespace WeightedDirectedGraphs
             float dy = Math.Abs(start.Y - end.Y);
             return 1 * (float)Math.Sqrt(dx * dx + dy * dy);
         }
-
-        public static List<Vertex<Point>> AStar(Graph<Point> graph, Point start, Point end, HeuristicsChoices heuristicsChoice)
+        public static Result AStar(out List<Vertex<Point>> path, Graph<Point> graph, Point start, Point end, Func<Point, Point, float> heuristic)
         {
-            List<Vertex<Point>> path = new List<Vertex<Point>>();
+            
             Heap<Vertex<Point>> queue = new Heap<Vertex<Point>>(5);
 
             Vertex<Point> Start = graph.Search(start);
             Vertex<Point> End = graph.Search(end);
 
+            if (End == null || Start == null)
+            {
+                //Invalid Pos
+                path = null;
+                return Result.InvalidPos;
+            }
+
             Start.CumulativeDistance = 0;
 
-            Start.FinalDistance = Heuristics(start, end, heuristicsChoice);
+            Start.FinalDistance = heuristic(start, end);
 
             queue.Push(Start);
+            path = new List<Vertex<Point>>();
 
             while (End.Visited == false)
             {
                 if (queue.Count == 0)
                 {
-                    return path;
+                    //Not Found
+                    return Result.NotFound;
                 }
 
                 Vertex<Point> vertex = queue.Pop();
@@ -78,7 +95,7 @@ namespace WeightedDirectedGraphs
                         {
                             vertex.Neighbors[i].EndingPoint.CumulativeDistance = tentDist;
 
-                            vertex.Neighbors[i].EndingPoint.FinalDistance = tentDist + Heuristics(vertex.Neighbors[i].EndingPoint.Value, end, heuristicsChoice);
+                            vertex.Neighbors[i].EndingPoint.FinalDistance = tentDist + heuristic(start, end);
 
                             int temp = queue.Find(vertex.Neighbors[i].EndingPoint);
 
@@ -113,7 +130,10 @@ namespace WeightedDirectedGraphs
                 path.Reverse();
             }
 
-            return path;
+            //Found
+            return Result.Found;
         }
+
+      
     }
 }
