@@ -17,8 +17,13 @@ namespace WeightedDirectedGraphs
         
         //Turn into actions and have it return the action.
 
+
+
         static float Heuristics(Point start, Point end, HeuristicsChoices heuristicsChoices)
         {
+            //How to use action
+            Action<float> manhattan = Manhattan(start, end);
+
             if (heuristicsChoices == HeuristicsChoices.Manhattan)
             {
                 return Manhattan(start, end);

@@ -61,7 +61,6 @@ namespace WeightedDirectedGraphs
             //turn heuristicsChoice into variable for Pathfinding.Manhattan
 
             PathFinding.Result result = PathFinding.AStar(out var items, graph, new Point(3, 4), new Point(0, 0), PathFinding.Manhattan);
-            //Not able to search backwards from Example: (3,4) to (0,0)
 
             Console.WriteLine(result.ToString());
 
