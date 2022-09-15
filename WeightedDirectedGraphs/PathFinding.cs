@@ -6,6 +6,8 @@ using System.Text;
 
 namespace WeightedDirectedGraphs
 {
+    using Heuristic = Func<Point, Point, float>;
+
     public static class PathFinding
     {
         public enum Result
@@ -14,30 +16,12 @@ namespace WeightedDirectedGraphs
             NotFound,
             InvalidPos
         }
-        
-        //Turn into actions and have it return the action.
 
+        static Heuristic[] heuristicArray = new Heuristic[] { Manhattan, Diagonal, Euclidean};
 
-
-        static float Heuristics(Point start, Point end, HeuristicsChoices heuristicsChoices)
+        public static Func<Point, Point, float> Heuristics(HeuristicsChoices heuristicsChoices)
         {
-            //How to use action
-            Action<float> manhattan = Manhattan(start, end);
-
-            if (heuristicsChoices == HeuristicsChoices.Manhattan)
-            {
-                return Manhattan(start, end);
-            }
-            if (heuristicsChoices == HeuristicsChoices.Diagonal)
-            {
-                return Diagonal(start, end);
-            }
-            if (heuristicsChoices == HeuristicsChoices.Euclidean)
-            {
-                return Euclidean(start, end);
-            }
-
-            throw new Exception("Choice of heuristics algorithm not given!");
+            return heuristicArray[(int)heuristicsChoices];
         }
 
         public static float Manhattan(Point start, Point end)
@@ -58,7 +42,7 @@ namespace WeightedDirectedGraphs
             float dy = Math.Abs(start.Y - end.Y);
             return 1 * (float)Math.Sqrt(dx * dx + dy * dy);
         }
-        public static Result AStar(out List<Vertex<Point>> path, Graph<Point> graph, Point start, Point end, Func<Point, Point, float> heuristic)
+        public static Result AStar(out List<Vertex<Point>> path, Graph<Point> graph, Point start, Point end, Heuristic heuristic)
         {
             
             Heap<Vertex<Point>> queue = new Heap<Vertex<Point>>(5);

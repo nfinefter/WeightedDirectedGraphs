@@ -3,12 +3,25 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
 
+
 namespace WeightedDirectedGraphs
 {
     class Program
     {
-        static void Main(string[] args)
+        static (Point, Point) PointsParse(string num)
         {
+            string[] strings = num.Split(',');
+            if (strings.Length != 4)
+            {
+                throw new ArgumentException("Invalid number of coordinates given.");
+            }
+
+            return new ValueTuple<Point, Point>(new Point(int.Parse(strings[0]), int.Parse(strings[1])), new Point(int.Parse(strings[2]), int.Parse(strings[3])));
+
+        }
+
+        static void Main(string[] args)
+        {            
             Graph<Point> graph = new Graph<Point>();
 
             //Vertex<Point> AUS = new Vertex<Point>(new Point(5, 4));
@@ -33,9 +46,14 @@ namespace WeightedDirectedGraphs
 
             Random rand = new Random();
 
-            for (int x = 0; x < 5; x++)
+
+
+            Console.WriteLine("How big should the graph be");
+            int size = int.Parse(Console.ReadLine());
+
+            for (int x = 0; x < size; x++)
             {
-                for (int y = 0; y < 5; y++)
+                for (int y = 0; y < size; y++)
                 {
                     Vertex<Point> temp = new Vertex<Point>(new Point(x, y));
                     graph.AddVertex(temp);
@@ -44,23 +62,29 @@ namespace WeightedDirectedGraphs
                     {
                             Vertex<Point> prevX = graph.Search(new Point(x - 1, y));
                             graph.AddEdge(prevX, temp, 1);
-                        graph.AddEdge(temp, prevX, 1);    
+                            graph.AddEdge(temp, prevX, 1);    
 
                             Vertex<Point> prevY = graph.Search(new Point(x, y - 1));
                             graph.AddEdge(prevY, temp, 1);
-                        graph.AddEdge(temp, prevY, 1);
-
-                            
+                            graph.AddEdge(temp, prevY, 1);       
                     }
                 }
             }
 
-            Console.WriteLine("0: Manhattan, 1: Diagonal, 2: Euclidean");
-            int heuristicsChoice = int.Parse(Console.ReadLine());
+            int heuristicsChoice = -1;
 
-            //turn heuristicsChoice into variable for Pathfinding.Manhattan
+            while (heuristicsChoice < 0 || heuristicsChoice > 2)
+            {
+                Console.WriteLine("0: Manhattan, 1: Diagonal, 2: Euclidean");
+                heuristicsChoice = int.Parse(Console.ReadLine());
+            }
 
-            PathFinding.Result result = PathFinding.AStar(out var items, graph, new Point(3, 4), new Point(0, 0), PathFinding.Manhattan);
+            Console.WriteLine("Give me two points each point separated by commas (X1, Y1, X2, Y2)");
+            string pointInput = Console.ReadLine();
+
+            (Point, Point) points = PointsParse(pointInput);
+
+            PathFinding.Result result = PathFinding.AStar(out var items, graph, points.Item1, points.Item2, PathFinding.Heuristics((HeuristicsChoices)heuristicsChoice));
 
             Console.WriteLine(result.ToString());
 
