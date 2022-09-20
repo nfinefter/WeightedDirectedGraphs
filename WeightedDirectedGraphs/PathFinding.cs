@@ -10,6 +10,7 @@ namespace WeightedDirectedGraphs
 
     public static class PathFinding
     {
+
         public enum Result
         {
             Found,
@@ -44,7 +45,6 @@ namespace WeightedDirectedGraphs
         }
         public static Result AStar(out List<Vertex<Point>> path, Graph<Point> graph, Point start, Point end, Heuristic heuristic)
         {
-            
             Heap<Vertex<Point>> queue = new Heap<Vertex<Point>>(5);
 
             Vertex<Point> Start = graph.Search(start);
