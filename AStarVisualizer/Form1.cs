@@ -1,4 +1,5 @@
 using Microsoft.VisualBasic.Devices;
+
 using WeightedDirectedGraphs;
 
 namespace AStarVisualizer
@@ -9,19 +10,32 @@ namespace AStarVisualizer
         Bitmap bitmap;
         Graphics gfx;
         Graph<Point> graph = new Graph<Point>();
+        ButtonType button;
+        int startCount = 0;
+        int endCount = 0;
+
         public Form1()
         {
             InitializeComponent();
         }
-        //Add Weighted, Start, and End Vertices
+        //TO DO:
         //Redo my graph connection logic
+
+        enum ButtonType
+        {
+            Start,
+            End,
+            Heavy,
+            Wall
+        }
+
+
         private void Form1_Load(object sender, EventArgs e)
         {
             bitmap = new Bitmap(GraphVisual.Width, GraphVisual.Height);
             gfx = Graphics.FromImage(bitmap);
-
-            
         }
+
         private void artButton_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < GraphVisual.Width; i += 10)
@@ -33,14 +47,17 @@ namespace AStarVisualizer
             }
             GraphVisual.Image = bitmap;
         }
+        
         private void startButton_Click(object sender, EventArgs e)
         {
             Updater.Enabled = true;
+
 
             for (int i = 0; i < GraphVisual.Width; i += 20)
             {
                 gfx.DrawLine(Pens.Black, new Point(i, 0), new Point(i, GraphVisual.Height));
             }
+
             for (int i = 0; i < GraphVisual.Height; i += 20)
             {
                 gfx.DrawLine(Pens.Black, new Point(0, i), new Point(GraphVisual.Width, i));
@@ -48,10 +65,12 @@ namespace AStarVisualizer
 
             GraphVisual.Image = bitmap;
         }
+
         private void Updater_Tick(object sender, EventArgs e)
         {
-            
+
         }
+        
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
         {
             int x = e.X;
@@ -77,7 +96,26 @@ namespace AStarVisualizer
 
                 Point pos = new Point(x, y);
 
-                gfx.FillRectangle(Brushes.Gray, new Rectangle(new Point(pos.X + 1, pos.Y + 1), new Size(size, size)));
+
+                if (button == ButtonType.Wall)
+                {
+                    gfx.FillRectangle(Brushes.Gray, new Rectangle(new Point(pos.X + 1, pos.Y + 1), new Size(size, size)));
+                }
+                if (button == ButtonType.Start && startCount == 0)
+                {
+                    gfx.FillRectangle(Brushes.Green, new Rectangle(new Point(pos.X + 1, pos.Y + 1), new Size(size, size)));
+                    startCount++;
+                }
+                if (button == ButtonType.End && endCount == 0)
+                {
+                    gfx.FillRectangle(Brushes.Red, new Rectangle(new Point(pos.X + 1, pos.Y + 1), new Size(size, size)));
+                    endCount++;
+                }
+                if (button == ButtonType.Heavy)
+                {
+                    gfx.FillRectangle(Brushes.Orange, new Rectangle(new Point(pos.X + 1, pos.Y + 1), new Size(size, size)));
+                }
+
                 GraphVisual.Image = bitmap;
             }
             if (e.Button == MouseButtons.Right)
@@ -98,12 +136,24 @@ namespace AStarVisualizer
 
                 Point pos = new Point(x, y);
 
+                Color color = bitmap.GetPixel(pos.X + 1, pos.Y + 1);
+
+                if (color.G == 128)
+                {
+                    startCount--;
+                }
+                if (color.R == 255)
+                {
+                    endCount--;
+                }
+
                 gfx.FillRectangle(Brushes.WhiteSmoke, new Rectangle(new Point(pos.X + 1, pos.Y + 1), new Size(size, size)));
+
                 GraphVisual.Image = bitmap;
             }
-            for (int X = 0; X < GraphVisual.Width; X+=size)
+            for (int X = 0; X < GraphVisual.Width; X += size)
             {
-                for (int Y = 0; Y < GraphVisual.Height; Y+=size)
+                for (int Y = 0; Y < GraphVisual.Height; Y += size)
                 {
                     Vertex<Point> temp = new Vertex<Point>(new Point(x, y));
                     graph.AddVertex(temp);
@@ -121,5 +171,27 @@ namespace AStarVisualizer
                 }
             }
         }
+
+        private void StartVertexButton_Click(object sender, EventArgs e)
+        {
+            button = ButtonType.Start;
+        }
+
+        private void EndVertexButton_Click(object sender, EventArgs e)
+        {
+            button = ButtonType.End;
+        }
+
+        private void WallButton_Click(object sender, EventArgs e)
+        {
+            button = ButtonType.Wall;
+        }
+
+        private void HeavyVertexButton_Click(object sender, EventArgs e)
+        {
+            button = ButtonType.Heavy;
+        }
+
+
     }
 }
