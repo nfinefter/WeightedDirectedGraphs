@@ -37,16 +37,17 @@
             this.StartVertexButton = new System.Windows.Forms.Button();
             this.EndVertexButton = new System.Windows.Forms.Button();
             this.HeavyVertexButton = new System.Windows.Forms.Button();
+            this.BeginButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.GraphVisual)).BeginInit();
             this.SuspendLayout();
             // 
             // startButton
             // 
-            this.startButton.Location = new System.Drawing.Point(705, 12);
+            this.startButton.Location = new System.Drawing.Point(705, 40);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(83, 23);
             this.startButton.TabIndex = 0;
-            this.startButton.Text = "Start";
+            this.startButton.Text = "CreateGrid";
             this.startButton.UseVisualStyleBackColor = true;
             this.startButton.Click += new System.EventHandler(this.startButton_Click);
             // 
@@ -67,7 +68,7 @@
             // 
             // artButton
             // 
-            this.artButton.Location = new System.Drawing.Point(705, 41);
+            this.artButton.Location = new System.Drawing.Point(-1, 430);
             this.artButton.Name = "artButton";
             this.artButton.Size = new System.Drawing.Size(83, 22);
             this.artButton.TabIndex = 2;
@@ -115,11 +116,22 @@
             this.HeavyVertexButton.UseVisualStyleBackColor = true;
             this.HeavyVertexButton.Click += new System.EventHandler(this.HeavyVertexButton_Click);
             // 
+            // BeginButton
+            // 
+            this.BeginButton.Location = new System.Drawing.Point(705, 11);
+            this.BeginButton.Name = "BeginButton";
+            this.BeginButton.Size = new System.Drawing.Size(83, 23);
+            this.BeginButton.TabIndex = 7;
+            this.BeginButton.Text = "Begin AStar";
+            this.BeginButton.UseVisualStyleBackColor = true;
+            this.BeginButton.Click += new System.EventHandler(this.BeginButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.BeginButton);
             this.Controls.Add(this.HeavyVertexButton);
             this.Controls.Add(this.EndVertexButton);
             this.Controls.Add(this.StartVertexButton);
@@ -145,5 +157,6 @@
         private Button StartVertexButton;
         private Button EndVertexButton;
         private Button HeavyVertexButton;
+        private Button BeginButton;
     }
 }

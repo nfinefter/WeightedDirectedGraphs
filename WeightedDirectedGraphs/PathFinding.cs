@@ -52,7 +52,6 @@ namespace WeightedDirectedGraphs
 
             if (End == null || Start == null)
             {
-                //Invalid Pos
                 path = null;
                 return Result.InvalidPos;
             }
@@ -68,7 +67,6 @@ namespace WeightedDirectedGraphs
             {
                 if (queue.Count == 0)
                 {
-                    //Not Found
                     return Result.NotFound;
                 }
 
@@ -119,7 +117,6 @@ namespace WeightedDirectedGraphs
                 path.Reverse();
             }
 
-            //Found
             return Result.Found;
         }
 

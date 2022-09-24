@@ -2,17 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace WeightedDirectedGraphs
 {
-    public class AStar
+    public record class AStarInfo(Heap<Vertex<Point>> Queue, Vertex<Point> vertex, List<Vertex<Point>> Path)
     {
-        Heap<Vertex<Point>> queue;
-        Vertex<Point> Start;
-        Vertex<Point> End;
-        Vertex<Point> vertex;
-        List<Vertex<Point>> path = new List<Vertex<Point>>();
-
+        Vertex<Point> Start { get; set; }
+        Vertex<Point> End { get; set; }
     }
 }
