@@ -38,6 +38,7 @@
             this.EndVertexButton = new System.Windows.Forms.Button();
             this.HeavyVertexButton = new System.Windows.Forms.Button();
             this.BeginButton = new System.Windows.Forms.Button();
+            this.HeuristicInput = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.GraphVisual)).BeginInit();
             this.SuspendLayout();
             // 
@@ -53,7 +54,7 @@
             // 
             // Updater
             // 
-            this.Updater.Interval = 17;
+            this.Updater.Interval = 1000;
             this.Updater.Tick += new System.EventHandler(this.Updater_Tick);
             // 
             // GraphVisual
@@ -126,11 +127,20 @@
             this.BeginButton.UseVisualStyleBackColor = true;
             this.BeginButton.Click += new System.EventHandler(this.BeginButton_Click);
             // 
+            // HeuristicInput
+            // 
+            this.HeuristicInput.Location = new System.Drawing.Point(-1, 0);
+            this.HeuristicInput.Name = "HeuristicInput";
+            this.HeuristicInput.Size = new System.Drawing.Size(212, 23);
+            this.HeuristicInput.TabIndex = 8;
+            this.HeuristicInput.Text = "0: Manhattan, 1: Diagonal, 2: Euclidean";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.HeuristicInput);
             this.Controls.Add(this.BeginButton);
             this.Controls.Add(this.HeavyVertexButton);
             this.Controls.Add(this.EndVertexButton);
@@ -144,6 +154,7 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.GraphVisual)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -158,5 +169,6 @@
         private Button EndVertexButton;
         private Button HeavyVertexButton;
         private Button BeginButton;
+        private TextBox HeuristicInput;
     }
 }
