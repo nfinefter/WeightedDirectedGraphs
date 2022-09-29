@@ -30,6 +30,7 @@ namespace AStarVisualizer
 
         //TO DO:
         //Fix "Ghost Row and Column" that let Astar go through them
+        //Tried fixing, I don't know what to do
         enum VertexType
         {
             Start,
@@ -70,9 +71,9 @@ namespace AStarVisualizer
                 gfx.DrawLine(Pens.Black, new Point(0, i), new Point(graphWidth , i));
             }
 
-            for (int X = 0; X < graphWidth; X += size)
+            for (int X = 0; X < graphWidth - size; X += size)
             {
-                for (int Y = 0; Y < graphHeight; Y += size)
+                for (int Y = 0; Y < graphHeight - size; Y += size)
                 {
                     graph.AddVertex(new Vertex<Point>(new Point(X, Y)));
                     AddEdges(new Point(X, Y), 1);
@@ -300,8 +301,25 @@ namespace AStarVisualizer
 
         private void PointToData(ref Point pos)
         {
-            pos.X = pos.X - (pos.X % (size));
-            pos.Y = pos.Y - (pos.Y % (size));
+            if (pos.X <= 380)
+            {
+                pos.X = pos.X - (pos.X % (size));
+            }
+            else
+            {
+                pos.X = pos.X - (pos.X % (size)) + size;
+            }
+            if (pos.Y <= 380)
+            {
+                pos.Y = pos.Y - (pos.Y % (size));
+            }
+            else
+            {
+                pos.Y = pos.Y - (pos.Y % (size)) + size;
+            }
+
+
+
         }
     }
 }
