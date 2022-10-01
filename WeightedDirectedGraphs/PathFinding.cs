@@ -43,8 +43,10 @@ namespace WeightedDirectedGraphs
             float dy = Math.Abs(start.Y - end.Y);
             return 1 * (float)Math.Sqrt(dx * dx + dy * dy);
         }
-        public static Result AStar(out List<Vertex<Point>> path, Graph<Point> graph, Point start, Point end, Heuristic heuristic)
+        public static Result AStar(out List<AStarInfo> data, out List<Vertex<Point>> path, Graph<Point> graph, Point start, Point end, Heuristic heuristic)
         {
+            data = new List<AStarInfo>();
+
             Heap<Vertex<Point>> queue = new Heap<Vertex<Point>>(5);
 
             Vertex<Point> Start = graph.Search(start);
@@ -72,6 +74,8 @@ namespace WeightedDirectedGraphs
 
                 Vertex<Point> vertex = queue.Pop();
 
+                data.Add(new AStarInfo(ColorToBrush.Visited, vertex.Value));
+
                 for (int i = 0; i < vertex.NeighborCount; i++)
                 {
                     if (vertex.Neighbors[i].EndingPoint.Visited != true)
@@ -89,8 +93,8 @@ namespace WeightedDirectedGraphs
                             if (temp == -1)
                             {
                                 queue.Push(vertex.Neighbors[i].EndingPoint);
+                                data.Add(new AStarInfo(ColorToBrush.Queued, vertex.Neighbors[i].EndingPoint.Value));
                             }
-
                             else
                             {
                                 queue.HeapifyUp(temp);
@@ -112,9 +116,14 @@ namespace WeightedDirectedGraphs
                 while (finder != null)
                 {
                     path.Add(finder);
+                    
                     finder = finder.Founder;
                 }
                 path.Reverse();
+                for (int i = 0; i < path.Count; i++)
+                {
+                    data.Add(new AStarInfo(ColorToBrush.FinalPath, path[i].Value));
+                }
             }
 
             return Result.Found;

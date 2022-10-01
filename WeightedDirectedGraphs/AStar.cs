@@ -7,9 +7,14 @@ using System.Text;
 
 namespace WeightedDirectedGraphs
 {
-    public record class AStarInfo(Heap<Vertex<Point>> Queue, Vertex<Point> Vertex, List<Vertex<Point>> Path)
+    public enum ColorToBrush
     {
-        Vertex<Point> Start { get; set; }
-        Vertex<Point> End { get; set; }
+        Queued,
+        Visited,
+        FinalPath
+    }
+    public record class AStarInfo(ColorToBrush color, Point pos)
+    {
+
     }
 }

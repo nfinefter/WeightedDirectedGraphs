@@ -84,7 +84,7 @@ namespace WeightedDirectedGraphs
 
             (Point, Point) points = PointsParse(pointInput);
 
-            PathFinding.Result result = PathFinding.AStar(out var items, graph, points.Item1, points.Item2, PathFinding.Heuristics((HeuristicsChoices)heuristicsChoice));
+            PathFinding.Result result = PathFinding.AStar(out var data, out var items, graph, points.Item1, points.Item2, PathFinding.Heuristics((HeuristicsChoices)heuristicsChoice));
 
             Console.WriteLine(result.ToString());
 

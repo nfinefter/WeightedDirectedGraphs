@@ -19,10 +19,11 @@ namespace AStarVisualizer
         Vertex<Point> Start;
         Vertex<Point> End;
         List<Vertex<Point>> path = new List<Vertex<Point>>();
+        List<AStarInfo> data;
         int TraversalCount = 0;
         int graphWidth = 20;
         int graphHeight = 20;
-
+        int Count = 0;
         public Form1()
         {
             InitializeComponent();
@@ -85,19 +86,40 @@ namespace AStarVisualizer
 
         private void Updater_Tick(object sender, EventArgs e)
         {
-            Vertex<Point> vertex = path[TraversalCount];
-
-            Point pos = vertex.Value;
-
-            pos.X = pos.X + 20 -  (pos.X % (size + 1));
-            pos.Y = pos.Y + 20 - (pos.Y % (size + 1));
-
-            gfx.FillRectangle(Brushes.Blue, new Rectangle(new Point(pos.X + 1, pos.Y + 1), new Size(size, size)));
-
-            if (TraversalCount < path.Count - 1)
+            if (Count < data.Count)
             {
-                TraversalCount++;
+                Brush brush = Brushes.Wheat;
+
+                Point pos = data[Count].pos;
+
+                pos.X = pos.X - (pos.X % (size + 1));
+                pos.Y = pos.Y - (pos.Y % (size + 1));
+
+                switch (data[Count].color)
+                {
+                    case ColorToBrush.Queued:
+                    {
+                            brush = Brushes.Green;
+                          break;
+                        }
+                    case ColorToBrush.Visited:
+                        {
+                            brush = Brushes.Blue;
+                            break;
+                        }
+                    case ColorToBrush.FinalPath:
+                        {
+                            brush = Brushes.Yellow;
+                            break;
+                        }
+
+                }
+
+                gfx.FillRectangle(brush, new Rectangle(new Point(pos.X + 1, pos.Y + 1), new Size(size, size)));
+
+                Count++;
             }
+
             GraphVisual.Image = bitmap;
         }      
 
@@ -289,9 +311,9 @@ namespace AStarVisualizer
             Heap<Vertex<Point>> queue = new Heap<Vertex<Point>>(0); 
             Vertex<Point> vertex = new Vertex<Point>(new Point(0, 0));
 
-            int heuristicsChoice = int.Parse(HeuristicInput.Text);
+            int heuristicsChoice = HeuristicDropDown.SelectedIndex;
 
-            PathFinding.Result result = PathFinding.AStar(out path, graph, Start.Value, End.Value, PathFinding.Heuristics((HeuristicsChoices)heuristicsChoice));
+            PathFinding.Result result = PathFinding.AStar(out data, out path, graph, Start.Value, End.Value, PathFinding.Heuristics((HeuristicsChoices)heuristicsChoice));
    
             if (result == PathFinding.Result.Found)
             {
