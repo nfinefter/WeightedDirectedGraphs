@@ -29,19 +29,19 @@ namespace WeightedDirectedGraphs
         {
             float dx = Math.Abs(start.X - end.X);
             float dy = Math.Abs(start.Y - end.Y);
-            return 1 * (dx + dy);
+            return 20 * (dx + dy);
         }
         static float Diagonal(Point start, Point end)
         {
             float dx = Math.Abs(start.X - end.X);
             float dy = Math.Abs(start.Y - end.Y);
-            return 1 * (dx + dy) + (1 - 2 * 1) * Math.Min(dx, dy);
+            return 20 * (dx + dy) + (20 - 40 * 20) * Math.Min(dx, dy);
         }
         static float Euclidean(Point start, Point end)
         {
             float dx = Math.Abs(start.X - end.X);
             float dy = Math.Abs(start.Y - end.Y);
-            return 1 * (float)Math.Sqrt(dx * dx + dy * dy);
+            return 20 * (float)Math.Sqrt(dx * dx + dy * dy);
         }
         public static Result AStar(out List<AStarInfo> data, out List<Vertex<Point>> path, Graph<Point> graph, Point start, Point end, Heuristic heuristic)
         {
