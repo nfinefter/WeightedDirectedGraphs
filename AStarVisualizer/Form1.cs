@@ -8,6 +8,7 @@ namespace AStarVisualizer
 {
     public partial class Form1 : Form
     {
+        static Vertex<Point> ChonkyVert;
 
         Bitmap bitmap;
         Graphics gfx;
@@ -60,6 +61,8 @@ namespace AStarVisualizer
         }
         private void startButton_Click(object sender, EventArgs e)
         {
+            startButton.Enabled = false;
+
             gfx.Clear(Color.WhiteSmoke);
 
             for (int i = 0; i < graphWidth; i += 20)
@@ -77,9 +80,18 @@ namespace AStarVisualizer
                 for (int Y = 0; Y < graphHeight - size; Y += size)
                 {
                     graph.AddVertex(new Vertex<Point>(new Point(X, Y)));
-                    AddEdges(new Point(X, Y), 1);
+                    AddEdges(new Point(X, Y), size);
                 }
             }
+
+            //for (int X = 0; X < graphWidth - size; X += size)
+            //{
+            //    for (int Y = 0; Y < graphHeight - size; Y += size)
+            //    {
+            //        graph.AddVertex(new Vertex<Point>(new Point(X, Y)));
+            //        AddEdges(new Point(X, Y), size);
+            //    }
+            //}
 
             GraphVisual.Image = bitmap;
         }
@@ -183,9 +195,11 @@ namespace AStarVisualizer
                     if (selectedType == VertexType.Heavy)
                     {
                         gfx.FillRectangle(Brushes.Orange, new Rectangle(new Point(pos.X + 1, pos.Y + 1), new Size(size, size)));
-              
+
+                        PointToData(ref pos);
                         RemoveEdges(pos);
-                        AddEdges(pos, 5);
+                        AddEdges(pos, size * 2);
+                        ChonkyVert = graph.Search(pos);
                     }
                 }
 
@@ -223,11 +237,12 @@ namespace AStarVisualizer
                 if (color.ToArgb() == Color.Orange.ToArgb())
                 {
                     RemoveEdges(pos);
-                    AddEdges(pos, 1);
+                    AddEdges(pos, size);
                 }
                 if (color.ToArgb() == Color.Gray.ToArgb())
                 {
-                    AddEdges(pos, 1);
+                    RemoveEdges(pos);
+                    AddEdges(pos, size);
 
                     Vertex<Point> vertex = new Vertex<Point>(pos);
 
@@ -243,6 +258,7 @@ namespace AStarVisualizer
         
         private void RemoveEdges(Point pos)
         {
+            //Fix these edges not adding the edges from the neighbors
             Vertex<Point> temp = graph.Search(pos);
 
              Vertex<Point> prevX = graph.Search(new Point(pos.X - size, pos.Y));
@@ -313,14 +329,16 @@ namespace AStarVisualizer
 
             int heuristicsChoice = HeuristicDropDown.SelectedIndex;
 
-            PathFinding.Result result = PathFinding.AStar(out data, out path, graph, Start.Value, End.Value, PathFinding.Heuristics((HeuristicsChoices)heuristicsChoice));
+            Point start = new Point(Start.Value.X + size, Start.Value.Y + size);
+            Point end = new Point(End.Value.X + size, End.Value.Y + size);
+
+            PathFinding.Result result = PathFinding.AStar(out data, out path, graph, start, end, PathFinding.Heuristics((HeuristicsChoices)heuristicsChoice));
    
             if (result == PathFinding.Result.Found)
             {
                 Updater.Enabled = true;
             }
         }
-
         private void PointToData(ref Point pos)
         {
             if (pos.X <= 380)

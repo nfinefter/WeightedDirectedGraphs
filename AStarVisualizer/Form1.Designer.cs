@@ -69,9 +69,9 @@
             // 
             // artButton
             // 
-            this.artButton.Location = new System.Drawing.Point(-1, 430);
+            this.artButton.Location = new System.Drawing.Point(-1, 442);
             this.artButton.Name = "artButton";
-            this.artButton.Size = new System.Drawing.Size(83, 22);
+            this.artButton.Size = new System.Drawing.Size(10, 10);
             this.artButton.TabIndex = 2;
             this.artButton.Text = "Art";
             this.artButton.UseVisualStyleBackColor = true;
@@ -134,7 +134,8 @@
             this.HeuristicDropDown.Items.AddRange(new object[] {
             "Manhattan",
             "Diagonal",
-            "Euclidean"});
+            "Euclidean",
+            "Dijkstra"});
             this.HeuristicDropDown.Location = new System.Drawing.Point(705, 185);
             this.HeuristicDropDown.Name = "HeuristicDropDown";
             this.HeuristicDropDown.Size = new System.Drawing.Size(83, 23);

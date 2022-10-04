@@ -18,30 +18,35 @@ namespace WeightedDirectedGraphs
             InvalidPos
         }
 
-        static Heuristic[] heuristicArray = new Heuristic[] { Manhattan, Diagonal, Euclidean};
+        static Heuristic[] heuristicArray = new Heuristic[] { Manhattan, Diagonal, Euclidean, Identity};
 
         public static Func<Point, Point, float> Heuristics(HeuristicsChoices heuristicsChoices)
         {
             return heuristicArray[(int)heuristicsChoices];
         }
 
+        public static float Identity (Point start, Point end)
+        {
+            //Dijkstra
+            return 0;
+        }
         public static float Manhattan(Point start, Point end)
         {
             float dx = Math.Abs(start.X - end.X);
             float dy = Math.Abs(start.Y - end.Y);
-            return 20 * (dx + dy);
+            return 1 * (dx + dy);
         }
         static float Diagonal(Point start, Point end)
         {
             float dx = Math.Abs(start.X - end.X);
             float dy = Math.Abs(start.Y - end.Y);
-            return 20 * (dx + dy) + (20 - 40 * 20) * Math.Min(dx, dy);
+            return 1 * (dx + dy) + (1 - 2 * 1) * Math.Min(dx, dy);
         }
         static float Euclidean(Point start, Point end)
         {
             float dx = Math.Abs(start.X - end.X);
             float dy = Math.Abs(start.Y - end.Y);
-            return 20 * (float)Math.Sqrt(dx * dx + dy * dy);
+            return 1 * (float)Math.Sqrt(dx * dx + dy * dy);
         }
         public static Result AStar(out List<AStarInfo> data, out List<Vertex<Point>> path, Graph<Point> graph, Point start, Point end, Heuristic heuristic)
         {
@@ -63,6 +68,7 @@ namespace WeightedDirectedGraphs
             Start.FinalDistance = heuristic(start, end);
 
             queue.Push(Start);
+
             path = new List<Vertex<Point>>();
 
             while (End.Visited == false)
@@ -86,7 +92,7 @@ namespace WeightedDirectedGraphs
                         {
                             vertex.Neighbors[i].EndingPoint.CumulativeDistance = tentDist;
 
-                            vertex.Neighbors[i].EndingPoint.FinalDistance = tentDist + heuristic(start, end);
+                            vertex.Neighbors[i].EndingPoint.FinalDistance = tentDist + heuristic(vertex.Neighbors[i].EndingPoint.Value, end);
 
                             int temp = queue.Find(vertex.Neighbors[i].EndingPoint);
 

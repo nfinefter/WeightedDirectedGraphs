@@ -12,7 +12,7 @@ namespace WeightedDirectedGraphs
         public List<Edge<T>> Neighbors { get; set; }
 
         public int NeighborCount => Neighbors.Count;
-        public Vertex<T> Founder;
+        public Vertex<T> Founder = null;
         public bool Visited = false;
         public float CumulativeDistance = float.PositiveInfinity;
         public float FinalDistance = float.PositiveInfinity;
@@ -27,21 +27,20 @@ namespace WeightedDirectedGraphs
             return Value.ToString();
         }
         public int CompareTo(Vertex<T> other)
-        {
-            if (other.CumulativeDistance.Equals(CumulativeDistance))
+        { 
+
+            if (other.FinalDistance.Equals(FinalDistance))
             {
                 return 0;
             }
-            if (other.CumulativeDistance > CumulativeDistance)
+            else if (other.FinalDistance > FinalDistance)
             {
                 return 1;
             }
-            if (other.CumulativeDistance < CumulativeDistance)
-            {
-                return -1;
-            }
+       
+            return -1;
+            
             //Flipped CompareTo because Heap is Max-Heap
-            return 0;
         }
     }
 }
