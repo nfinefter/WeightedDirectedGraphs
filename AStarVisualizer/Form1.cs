@@ -30,9 +30,6 @@ namespace AStarVisualizer
             InitializeComponent();
         }
 
-        //TO DO:
-        //Fix "Ghost Row and Column" that let Astar go through them
-        //Tried fixing, I don't know what to do
         enum VertexType
         {
             Start,
@@ -75,6 +72,7 @@ namespace AStarVisualizer
                 gfx.DrawLine(Pens.Black, new Point(0, i), new Point(graphWidth , i));
             }
 
+            //4 Connections
             for (int X = 0; X < graphWidth - size; X += size)
             {
                 for (int Y = 0; Y < graphHeight - size; Y += size)
@@ -84,14 +82,18 @@ namespace AStarVisualizer
                 }
             }
 
-            //for (int X = 0; X < graphWidth - size; X += size)
-            //{
-            //    for (int Y = 0; Y < graphHeight - size; Y += size)
-            //    {
-            //        graph.AddVertex(new Vertex<Point>(new Point(X, Y)));
-            //        AddEdges(new Point(X, Y), size);
-            //    }
-            //}
+            //Corner Connections not sure if works
+            int x = 0;
+            int y = 0;
+
+            while (x < graphWidth - size && y < graphHeight - size)
+            {
+                graph.AddVertex(new Vertex<Point>(new Point(x, y)));
+                AddEdges(new Point(x, y), size);
+
+                x += size;
+                y += size;
+            }
 
             GraphVisual.Image = bitmap;
         }
@@ -236,11 +238,13 @@ namespace AStarVisualizer
                 }
                 if (color.ToArgb() == Color.Orange.ToArgb())
                 {
+                    PointToData(ref pos);
                     RemoveEdges(pos);
                     AddEdges(pos, size);
                 }
                 if (color.ToArgb() == Color.Gray.ToArgb())
                 {
+                    PointToData(ref pos);
                     RemoveEdges(pos);
                     AddEdges(pos, size);
 
@@ -259,6 +263,8 @@ namespace AStarVisualizer
         private void RemoveEdges(Point pos)
         {
             //Fix these edges not adding the edges from the neighbors
+            //Checked graph and it does remove 8 edges when wall is clicked which seems right it gets all surrounding
+            //AStar might be wrong and ignores edges?
             Vertex<Point> temp = graph.Search(pos);
 
              Vertex<Point> prevX = graph.Search(new Point(pos.X - size, pos.Y));
