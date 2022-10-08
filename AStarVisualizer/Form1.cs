@@ -39,6 +39,7 @@ namespace AStarVisualizer
         }
         private void Form1_Load(object sender, EventArgs e)
         {
+            HeuristicDropDown.SelectedIndex = 0;
             graphWidth += GraphVisual.Width;
             graphHeight += GraphVisual.Height;
 
@@ -69,7 +70,7 @@ namespace AStarVisualizer
 
             for (int i = 0; i < graphHeight; i += 20)
             {
-                gfx.DrawLine(Pens.Black, new Point(0, i), new Point(graphWidth , i));
+                gfx.DrawLine(Pens.Black, new Point(0, i), new Point(graphWidth, i));
             }
 
             //4 Connections
@@ -83,17 +84,17 @@ namespace AStarVisualizer
             }
 
             //Corner Connections not sure if works
-            int x = 0;
-            int y = 0;
+            //int x = 0;
+            //int y = 0;
 
-            while (x < graphWidth - size && y < graphHeight - size)
-            {
-                graph.AddVertex(new Vertex<Point>(new Point(x, y)));
-                AddEdges(new Point(x, y), size);
+            //while (x < graphWidth - size && y < graphHeight - size)
+            //{
+            //    graph.AddVertex(new Vertex<Point>(new Point(x, y)));
+            //    AddEdges(new Point(x, y), size);
 
-                x += size;
-                y += size;
-            }
+            //    x += size;
+            //    y += size;
+            //}
 
             GraphVisual.Image = bitmap;
         }
@@ -106,15 +107,16 @@ namespace AStarVisualizer
 
                 Point pos = data[Count].pos;
 
-                pos.X = pos.X - (pos.X % (size + 1));
-                pos.Y = pos.Y - (pos.Y % (size + 1));
+                pos = new Point(pos.X * 20 / 19, pos.Y * 20 / 19);
+
+               // DataToPoint(ref pos);
 
                 switch (data[Count].color)
                 {
                     case ColorToBrush.Queued:
-                    {
+                        {
                             brush = Brushes.Green;
-                          break;
+                            break;
                         }
                     case ColorToBrush.Visited:
                         {
@@ -135,7 +137,7 @@ namespace AStarVisualizer
             }
 
             GraphVisual.Image = bitmap;
-        }      
+        }
 
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
         {
@@ -144,22 +146,9 @@ namespace AStarVisualizer
 
             if (e.Button == MouseButtons.Left)
             {
-                int operation = x % (size + 1);
-
-                if (operation != 0)
-                {
-                    x -= operation;
-                }
-
-                operation = y % (size + 1);
-
-                if (operation != 0)
-                {
-                    y -= operation;
-                }
-
                 Point pos = new Point(x, y);
-             
+                DataToPoint(ref pos);
+
                 Color color = bitmap.GetPixel(pos.X + 1, pos.Y + 1);
 
                 if (color.ToArgb() == Color.WhiteSmoke.ToArgb())
@@ -200,7 +189,7 @@ namespace AStarVisualizer
 
                         PointToData(ref pos);
                         RemoveEdges(pos);
-                        AddEdges(pos, size * 2);
+                        AddEdges(pos, (size * 20));
                         ChonkyVert = graph.Search(pos);
                     }
                 }
@@ -210,21 +199,10 @@ namespace AStarVisualizer
 
             if (e.Button == MouseButtons.Right)
             {
-                int operation = x % (size + 1);
-
-                if (operation != 0)
-                {
-                    x -= operation;
-                }
-
-                operation = y % (size + 1);
-
-                if (operation != 0)
-                {
-                    y -= operation;
-                }
 
                 Point pos = new Point(x, y);
+                
+                DataToPoint(ref pos);
 
                 Color color = bitmap.GetPixel(pos.X + 1, pos.Y + 1);
 
@@ -257,9 +235,9 @@ namespace AStarVisualizer
 
                 GraphVisual.Image = bitmap;
             }
-           
+
         }
-        
+
         private void RemoveEdges(Point pos)
         {
             //Fix these edges not adding the edges from the neighbors
@@ -267,79 +245,77 @@ namespace AStarVisualizer
             //AStar might be wrong and ignores edges?
             Vertex<Point> temp = graph.Search(pos);
 
-             Vertex<Point> prevX = graph.Search(new Point(pos.X - size, pos.Y));
-             graph.RemoveEdge(prevX, temp);
-             graph.RemoveEdge(temp, prevX);
+            Vertex<Point> prevX = graph.Search(new Point(pos.X - size, pos.Y));
+            graph.RemoveEdge(prevX, temp);
+            graph.RemoveEdge(temp, prevX);
 
-             prevX = graph.Search(new Point(pos.X + size, pos.Y));
-             graph.RemoveEdge(prevX, temp);
-             graph.RemoveEdge(temp, prevX);
+            prevX = graph.Search(new Point(pos.X + size, pos.Y));
+            graph.RemoveEdge(prevX, temp);
+            graph.RemoveEdge(temp, prevX);
 
-             Vertex<Point> prevY = graph.Search(new Point(pos.X, pos.Y - size));
-             graph.RemoveEdge(prevY, temp);
-             graph.RemoveEdge(temp, prevY);
+            Vertex<Point> prevY = graph.Search(new Point(pos.X, pos.Y - size));
+            graph.RemoveEdge(prevY, temp);
+            graph.RemoveEdge(temp, prevY);
 
-             prevY = graph.Search(new Point(pos.X, pos.Y + size));
-             graph.RemoveEdge(prevY, temp);
-             graph.RemoveEdge(temp, prevY);
+            prevY = graph.Search(new Point(pos.X, pos.Y + size));
+            graph.RemoveEdge(prevY, temp);
+            graph.RemoveEdge(temp, prevY);
 
         }
-        
+
         private void AddEdges(Point pos, int weight)
         {
-             Vertex<Point> temp = graph.Search(pos);
+            Vertex<Point> temp = graph.Search(pos);
 
-                    Vertex<Point> prevX = graph.Search(new Point(pos.X - size, pos.Y));
-                    graph.AddEdge(prevX, temp, weight);
-                    graph.AddEdge(temp, prevX, weight);
+            Vertex<Point> prevX = graph.Search(new Point(pos.X - size, pos.Y));
+            graph.AddEdge(prevX, temp, weight);
+            graph.AddEdge(temp, prevX, weight);
 
-                    prevX = graph.Search(new Point(pos.X + size, pos.Y));
-                    graph.AddEdge(prevX, temp, weight);
-                    graph.AddEdge(temp, prevX, weight);
+            prevX = graph.Search(new Point(pos.X + size, pos.Y));
+            graph.AddEdge(prevX, temp, weight);
+            graph.AddEdge(temp, prevX, weight);
 
-                    Vertex<Point> prevY = graph.Search(new Point(pos.X, pos.Y - size));
-                    graph.AddEdge(prevY, temp, weight);
-                    graph.AddEdge(temp, prevY, weight);
+            Vertex<Point> prevY = graph.Search(new Point(pos.X, pos.Y - size));
+            graph.AddEdge(prevY, temp, weight);
+            graph.AddEdge(temp, prevY, weight);
 
-                    prevY = graph.Search(new Point(pos.X, pos.Y + size));
-                    graph.AddEdge(prevY, temp, weight);
-                    graph.AddEdge(temp, prevY, weight);
+            prevY = graph.Search(new Point(pos.X, pos.Y + size));
+            graph.AddEdge(prevY, temp, weight);
+            graph.AddEdge(temp, prevY, weight);
         }
-        
+
         private void StartVertexButton_Click(object sender, EventArgs e)
         {
             selectedType = VertexType.Start;
         }
-        
+
         private void EndVertexButton_Click(object sender, EventArgs e)
         {
             selectedType = VertexType.End;
         }
-        
+
         private void WallButton_Click(object sender, EventArgs e)
         {
             selectedType = VertexType.Wall;
         }
-        
+
         private void HeavyVertexButton_Click(object sender, EventArgs e)
         {
             selectedType = VertexType.Heavy;
         }
-        
+
         private void BeginButton_Click(object sender, EventArgs e)
-        {    
+        {
             if (Start == null || End == null) return;
 
-            Heap<Vertex<Point>> queue = new Heap<Vertex<Point>>(0); 
+            Heap<Vertex<Point>> queue = new Heap<Vertex<Point>>(0);
             Vertex<Point> vertex = new Vertex<Point>(new Point(0, 0));
 
             int heuristicsChoice = HeuristicDropDown.SelectedIndex;
 
-            Point start = new Point(Start.Value.X + size, Start.Value.Y + size);
-            Point end = new Point(End.Value.X + size, End.Value.Y + size);
 
-            PathFinding.Result result = PathFinding.AStar(out data, out path, graph, start, end, PathFinding.Heuristics((HeuristicsChoices)heuristicsChoice));
-   
+            PathFinding.Result result = PathFinding.AStar(out data, out path, graph, Start.Value, End.Value, PathFinding.Heuristics((HeuristicsChoices)heuristicsChoice));
+
             if (result == PathFinding.Result.Found)
             {
                 Updater.Enabled = true;
@@ -367,5 +343,22 @@ namespace AStarVisualizer
 
 
         }
+        private void DataToPoint(ref Point pos)
+        {
+            int operation = pos.X % (size + 1);
+
+            if (operation != 0)
+            {
+                pos.X -= operation;
+            }
+
+            operation = pos.Y % (size + 1);
+
+            if (operation != 0)
+            {
+                pos.Y -= operation;
+            }
+        }
+
     }
 }

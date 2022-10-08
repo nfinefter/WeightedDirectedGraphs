@@ -119,12 +119,13 @@ namespace WeightedDirectedGraphs
             {
                 Vertex<Point> finder = End;
 
-                while (finder != null)
+                while (finder.Founder != null)
                 {
                     path.Add(finder);
                     
                     finder = finder.Founder;
                 }
+                path.Add(finder);
                 path.Reverse();
                 for (int i = 0; i < path.Count; i++)
                 {

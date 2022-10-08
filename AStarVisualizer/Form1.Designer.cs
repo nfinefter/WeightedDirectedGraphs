@@ -139,7 +139,7 @@
             this.HeuristicDropDown.Location = new System.Drawing.Point(705, 185);
             this.HeuristicDropDown.Name = "HeuristicDropDown";
             this.HeuristicDropDown.Size = new System.Drawing.Size(83, 23);
-            this.HeuristicDropDown.TabIndex = 9;
+            this.HeuristicDropDown.TabIndex = 9;           
             // 
             // Form1
             // 
