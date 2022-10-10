@@ -86,18 +86,25 @@ namespace AStarVisualizer
 
             GraphVisual.Image = bitmap;
         }
-
+         
         private void Updater_Tick(object sender, EventArgs e)
-        {
+         {
             if (Count < data.Count)
             {
                 Brush brush = Brushes.Wheat;
 
                 Point pos = data[Count].pos;
-
+                 
                 pos = new Point(pos.X * 20 / 19, pos.Y * 20 / 19);
 
-               // DataToPoint(ref pos);
+                if (pos.X == 400)
+                {
+                    pos.X -= 20;
+                }
+                if (pos.Y == 400)
+                {
+                    pos.Y -= 20;
+                }
 
                 switch (data[Count].color)
                 {
@@ -143,15 +150,11 @@ namespace AStarVisualizer
                 {
 
                     if (selectedType == VertexType.Wall)
-                    {
+                    { 
                         gfx.FillRectangle(Brushes.Gray, new Rectangle(new Point(pos.X + 1, pos.Y + 1), new Size(size, size)));
 
                         PointToData(ref pos);
                         RemoveEdges(pos);
-
-                        Vertex<Point> vertex = new Vertex<Point>(pos);
-
-                        //graph.RemoveVertex(vertex);
                     }
                     if (selectedType == VertexType.Start && startCount == 0)
                     {
@@ -299,6 +302,8 @@ namespace AStarVisualizer
             int heuristicsChoice = HeuristicDropDown.SelectedIndex;
 
 
+
+
             PathFinding.Result result = PathFinding.AStar(out data, out path, graph, Start.Value, End.Value, PathFinding.Heuristics((HeuristicsChoices)heuristicsChoice));
 
             if (result == PathFinding.Result.Found)
@@ -324,7 +329,16 @@ namespace AStarVisualizer
             {
                 pos.Y = pos.Y - (pos.Y % (size)) + size;
             }
+            //pos = new Point(pos.X * 20 / 19, pos.Y * 20 / 19);
 
+            //if (pos.X == 400)
+            //{
+            //    pos.X -= 20;
+            //}
+            //if (pos.Y == 400)
+            //{
+            //    pos.Y -= 20;
+            //}
 
 
         }
