@@ -39,6 +39,7 @@ namespace AStarVisualizer
         }
         private void Form1_Load(object sender, EventArgs e)
         {
+            //Ignores the whole right and bottom row/column
             HeuristicDropDown.SelectedIndex = 0;
             graphWidth += GraphVisual.Width;
             graphHeight += GraphVisual.Height;
@@ -63,38 +64,25 @@ namespace AStarVisualizer
 
             gfx.Clear(Color.WhiteSmoke);
 
-            for (int i = 0; i < graphWidth; i += 20)
+            for (int i = 0; i < graphWidth; i += size+1)
             {
                 gfx.DrawLine(Pens.Black, new Point(i, 0), new Point(i, graphHeight));
             }
 
-            for (int i = 0; i < graphHeight; i += 20)
+            for (int i = 0; i < graphHeight; i += size+1)
             {
                 gfx.DrawLine(Pens.Black, new Point(0, i), new Point(graphWidth, i));
             }
 
             //4 Connections
-            for (int X = 0; X < graphWidth - size; X += size)
+            for (int X = 0; X < graphWidth - size *2; X += size)
             {
-                for (int Y = 0; Y < graphHeight - size; Y += size)
+                for (int Y = 0; Y < graphHeight - size *2; Y += size)
                 {
                     graph.AddVertex(new Vertex<Point>(new Point(X, Y)));
                     AddEdges(new Point(X, Y), size);
                 }
             }
-
-            //Corner Connections not sure if works
-            //int x = 0;
-            //int y = 0;
-
-            //while (x < graphWidth - size && y < graphHeight - size)
-            //{
-            //    graph.AddVertex(new Vertex<Point>(new Point(x, y)));
-            //    AddEdges(new Point(x, y), size);
-
-            //    x += size;
-            //    y += size;
-            //}
 
             GraphVisual.Image = bitmap;
         }
@@ -163,7 +151,7 @@ namespace AStarVisualizer
 
                         Vertex<Point> vertex = new Vertex<Point>(pos);
 
-                        graph.RemoveVertex(vertex);
+                        //graph.RemoveVertex(vertex);
                     }
                     if (selectedType == VertexType.Start && startCount == 0)
                     {
@@ -206,6 +194,8 @@ namespace AStarVisualizer
 
                 Color color = bitmap.GetPixel(pos.X + 1, pos.Y + 1);
 
+                gfx.FillRectangle(Brushes.WhiteSmoke, new Rectangle(new Point(pos.X + 1, pos.Y + 1), new Size(size, size)));
+
                 if (color.ToArgb() == Color.Green.ToArgb())
                 {
                     startCount--;
@@ -231,8 +221,6 @@ namespace AStarVisualizer
                     graph.AddVertex(vertex);
                 }
 
-                gfx.FillRectangle(Brushes.WhiteSmoke, new Rectangle(new Point(pos.X + 1, pos.Y + 1), new Size(size, size)));
-
                 GraphVisual.Image = bitmap;
             }
 
@@ -240,9 +228,6 @@ namespace AStarVisualizer
 
         private void RemoveEdges(Point pos)
         {
-            //Fix these edges not adding the edges from the neighbors
-            //Checked graph and it does remove 8 edges when wall is clicked which seems right it gets all surrounding
-            //AStar might be wrong and ignores edges?
             Vertex<Point> temp = graph.Search(pos);
 
             Vertex<Point> prevX = graph.Search(new Point(pos.X - size, pos.Y));
