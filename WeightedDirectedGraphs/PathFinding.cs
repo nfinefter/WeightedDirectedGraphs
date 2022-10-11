@@ -1,6 +1,8 @@
 ﻿using Heap_Tree;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Text;
 
@@ -24,8 +26,7 @@ namespace WeightedDirectedGraphs
         {
             return heuristicArray[(int)heuristicsChoices];
         }
-
-        public static float Identity (Point start, Point end)
+        public static float Identity(Point start, Point end)
         {
             //Dijkstra
             return 0;
@@ -49,21 +50,17 @@ namespace WeightedDirectedGraphs
             return 1 * (float)Math.Sqrt(dx * dx + dy * dy);
         }
 
-        public static Result BellmanFord(out List<AStarInfo> data, out List<Vertex<Point>> path, Graph<Point> graph, Point start, Point end)
+        public static Result BellmanFord(out List<AStarInfo> data, out List<Vertex<Point>> path, Graph<Point> graph, Vertex<Point> start, Vertex<Point> end)
         {
             data = new List<AStarInfo>();
 
             Queue<Vertex<Point>> queue = new Queue<Vertex<Point>>();
-            Vertex<Point> Start = graph.Search(start);
-            Vertex<Point> End = graph.Search(end);
 
-            if (End == null || Start == null)
+            if (end == null || start == null)
             {
                 path = null;
                 return Result.InvalidPos;
             }
-
-            path = new List<Vertex<Point>>();
 
             for (int i = 0; i < graph.Vertices.Count; i++)
             {
@@ -77,7 +74,7 @@ namespace WeightedDirectedGraphs
 
             path = new List<Vertex<Point>>();
 
-            while (End.Visited == false)
+            while (end.Visited == false)
             {
                 if (queue.Count == 0)
                 {
@@ -100,7 +97,95 @@ namespace WeightedDirectedGraphs
                         }
                         if (vertex.CumulativeDistance.CompareTo(tentDist) > 0)
                         {
-                            End.Visited = true;
+                            end.Visited = true;
+                        }
+                    }
+                }
+
+                vertex.Visited = true;
+            }
+
+            if (end.Visited == true)
+            {
+                Vertex<Point> finder = end;
+
+                while (finder.Founder != null)
+                {
+                    path.Add(finder);
+
+                    finder = finder.Founder;
+                }
+                path.Add(finder);
+                path.Reverse();
+                for (int i = 0; i < path.Count; i++)
+                {
+                    data.Add(new AStarInfo(ColorToBrush.FinalPath, path[i].Value));
+                }
+            }
+
+            return Result.Found;
+        }
+
+
+        public static Result Astar(out List<AStarInfo> data, out List<Vertex<Point>> path, Vertex<Point> Start, Vertex<Point> End, Heuristic heuristic)
+        {
+            data = new List<AStarInfo>();
+            if (End == null || Start == null)
+            {
+                path = null;
+                return Result.InvalidPos;
+            }
+            Start.CumulativeDistance = 0;
+
+            Start.FinalDistance = heuristic(Start.Value, End.Value);
+
+            Heap<Vertex<Point>> queue = new Heap<Vertex<Point>>(5);
+            Start.CumulativeDistance = 0;
+
+            Start.FinalDistance = heuristic(Start.Value, End.Value);
+
+            queue.Push(Start);
+
+            path = new List<Vertex<Point>>();
+
+
+            while (End.Visited == false)
+            {
+                if (queue.Count == 0)
+                {
+                    return Result.NotFound;
+                }
+
+                Vertex<Point> vertex = queue.Pop();
+
+                data.Add(new AStarInfo(ColorToBrush.Visited, vertex.Value));
+
+                for (int i = 0; i < vertex.NeighborCount; i++)
+                {
+                    if (vertex.Neighbors[i].EndingPoint.Visited != true)
+                    {
+                        float tentDist = vertex.CumulativeDistance + vertex.Neighbors[i].Weight;
+
+                        if (tentDist.CompareTo(vertex.Neighbors[i].EndingPoint.CumulativeDistance) < 0)
+                        {
+                            vertex.Neighbors[i].EndingPoint.CumulativeDistance = tentDist;
+
+                            vertex.Neighbors[i].EndingPoint.FinalDistance = tentDist + heuristic(vertex.Neighbors[i].EndingPoint.Value, End.Value);
+
+                            int temp = queue.Find(vertex.Neighbors[i].EndingPoint);
+
+                            if (temp == -1)
+                            {
+                                queue.Push(vertex.Neighbors[i].EndingPoint);
+                                data.Add(new AStarInfo(ColorToBrush.Queued, vertex.Neighbors[i].EndingPoint.Value));
+                            }
+                            else
+                            {
+                                queue.HeapifyUp(temp);
+                            }
+
+                            vertex.Neighbors[i].EndingPoint.Founder = vertex;
+
                         }
                     }
                 }
@@ -131,92 +216,11 @@ namespace WeightedDirectedGraphs
 
         public static Result AStar(out List<AStarInfo> data, out List<Vertex<Point>> path, Graph<Point> graph, Point start, Point end, Heuristic heuristic)
         {
-            data = new List<AStarInfo>();
-
-            Heap<Vertex<Point>> queue = new Heap<Vertex<Point>>(5);
-
             Vertex<Point> Start = graph.Search(start);
             Vertex<Point> End = graph.Search(end);
-
-            if (End == null || Start == null)
-            {
-                path = null;
-                return Result.InvalidPos;
-            }
-
-            Start.CumulativeDistance = 0;
-
-            Start.FinalDistance = heuristic(start, end);
-
-            queue.Push(Start);
-
-            path = new List<Vertex<Point>>();
-
-            while (End.Visited == false)
-            {
-                if (queue.Count == 0)
-                {
-                    return Result.NotFound;
-                }
-
-                Vertex<Point> vertex = queue.Pop();
-
-                data.Add(new AStarInfo(ColorToBrush.Visited, vertex.Value));
-
-                for (int i = 0; i < vertex.NeighborCount; i++)
-                {
-                    if (vertex.Neighbors[i].EndingPoint.Visited != true)
-                    {
-                        float tentDist = vertex.CumulativeDistance + vertex.Neighbors[i].Weight;
-
-                        if (tentDist.CompareTo(vertex.Neighbors[i].EndingPoint.CumulativeDistance) < 0)
-                        {
-                            vertex.Neighbors[i].EndingPoint.CumulativeDistance = tentDist;
-
-                            vertex.Neighbors[i].EndingPoint.FinalDistance = tentDist + heuristic(vertex.Neighbors[i].EndingPoint.Value, end);
-
-                            int temp = queue.Find(vertex.Neighbors[i].EndingPoint);
-
-                            if (temp == -1)
-                            {
-                                queue.Push(vertex.Neighbors[i].EndingPoint);
-                                data.Add(new AStarInfo(ColorToBrush.Queued, vertex.Neighbors[i].EndingPoint.Value));
-                            }
-                            else
-                            {
-                                queue.HeapifyUp(temp);
-                            }
-
-                            vertex.Neighbors[i].EndingPoint.Founder = vertex;
-
-                        }
-                    }
-                }
-
-                vertex.Visited = true;
-            }
-
-            if (End.Visited == true)
-            {
-                Vertex<Point> finder = End;
-
-                while (finder.Founder != null)
-                {
-                    path.Add(finder);
-                    
-                    finder = finder.Founder;
-                }
-                path.Add(finder);
-                path.Reverse();
-                for (int i = 0; i < path.Count; i++)
-                {
-                    data.Add(new AStarInfo(ColorToBrush.FinalPath, path[i].Value));
-                }
-            }
-
-            return Result.Found;
+            return Astar(out data, out path, Start, End, heuristic);
         }
 
-      
+
     }
 }

@@ -59,10 +59,11 @@
             // 
             // GraphVisual
             // 
-            this.GraphVisual.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.GraphVisual.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.GraphVisual.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.GraphVisual.Location = new System.Drawing.Point(200, 25);
             this.GraphVisual.Name = "GraphVisual";
-            this.GraphVisual.Size = new System.Drawing.Size(400, 400);
+            this.GraphVisual.Size = new System.Drawing.Size(420, 420);
             this.GraphVisual.TabIndex = 1;
             this.GraphVisual.TabStop = false;
             this.GraphVisual.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseClick);
@@ -135,16 +136,18 @@
             "Manhattan",
             "Diagonal",
             "Euclidean",
-            "Dijkstra"});
+            "Dijkstra",
+            "BellmanFord"});
             this.HeuristicDropDown.Location = new System.Drawing.Point(705, 185);
             this.HeuristicDropDown.Name = "HeuristicDropDown";
             this.HeuristicDropDown.Size = new System.Drawing.Size(83, 23);
-            this.HeuristicDropDown.TabIndex = 9;           
+            this.HeuristicDropDown.TabIndex = 9;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.HeuristicDropDown);
             this.Controls.Add(this.BeginButton);

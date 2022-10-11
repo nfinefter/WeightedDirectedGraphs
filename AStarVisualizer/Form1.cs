@@ -22,8 +22,8 @@ namespace AStarVisualizer
         List<Vertex<Point>> path = new List<Vertex<Point>>();
         List<AStarInfo> data;
         int TraversalCount = 0;
-        int graphWidth = 20;
-        int graphHeight = 20;
+        int graphWidth = 0;
+        int graphHeight = 0;
         int Count = 0;
         public Form1()
         {
@@ -39,10 +39,11 @@ namespace AStarVisualizer
         }
         private void Form1_Load(object sender, EventArgs e)
         {
+            //Last row on right should not be filled check for extra drawing.
             //Ignores the whole right and bottom row/column
             HeuristicDropDown.SelectedIndex = 0;
-            graphWidth += GraphVisual.Width;
-            graphHeight += GraphVisual.Height;
+            graphWidth += 400;//GraphVisual.Width;
+            graphHeight += 400;//GraphVisual.Height;
 
             bitmap = new Bitmap(GraphVisual.Width, GraphVisual.Height);
             gfx = Graphics.FromImage(bitmap);
@@ -64,37 +65,49 @@ namespace AStarVisualizer
 
             gfx.Clear(Color.WhiteSmoke);
 
-            for (int i = 0; i < graphWidth; i += size+1)
+            for (int i = 0; i < graphWidth; i += size + 1)
             {
                 gfx.DrawLine(Pens.Black, new Point(i, 0), new Point(i, graphHeight));
             }
 
-            for (int i = 0; i < graphHeight; i += size+1)
+            for (int i = 0; i < graphHeight; i += size + 1)
             {
                 gfx.DrawLine(Pens.Black, new Point(0, i), new Point(graphWidth, i));
             }
 
+            Brush temp = Brushes.Red;
             //4 Connections
-            for (int X = 0; X < graphWidth - size *2; X += size)
+            for (int X = 0; X <= graphWidth / 20 * size - size; X += size)
             {
-                for (int Y = 0; Y < graphHeight - size *2; Y += size)
+                for (int Y = 0; Y < graphHeight / 20 * size; Y += size)
                 {
+ 
                     graph.AddVertex(new Vertex<Point>(new Point(X, Y)));
+                    if ((X / size % 2 + Y / size) % 2 == 0)
+                    {
+                        temp = Brushes.Red;
+                    }
+                    else
+                    {
+                        temp = Brushes.Yellow;
+                    }
+                    gfx.FillRectangle(temp, new Rectangle(X + X / size, Y + Y / size, size, size));
                     AddEdges(new Point(X, Y), size);
+          
                 }
             }
 
             GraphVisual.Image = bitmap;
         }
-         
+
         private void Updater_Tick(object sender, EventArgs e)
-         {
+        {
             if (Count < data.Count)
             {
                 Brush brush = Brushes.Wheat;
 
                 Point pos = data[Count].pos;
-                 
+
                 pos = new Point(pos.X * 20 / 19, pos.Y * 20 / 19);
 
                 if (pos.X == 400)
@@ -150,7 +163,7 @@ namespace AStarVisualizer
                 {
 
                     if (selectedType == VertexType.Wall)
-                    { 
+                    {
                         gfx.FillRectangle(Brushes.Gray, new Rectangle(new Point(pos.X + 1, pos.Y + 1), new Size(size, size)));
 
                         PointToData(ref pos);
@@ -162,7 +175,7 @@ namespace AStarVisualizer
 
                         PointToData(ref pos);
 
-                        Start = new Vertex<Point>(new Point(pos.X, pos.Y));
+                        Start = graph.Search(new Point(pos.X, pos.Y));
                         startCount++;
                     }
                     if (selectedType == VertexType.End && endCount == 0)
@@ -171,7 +184,7 @@ namespace AStarVisualizer
 
                         PointToData(ref pos);
 
-                        End = new Vertex<Point>(new Point(pos.X, pos.Y));
+                        End = graph.Search(new Point(pos.X, pos.Y));
                         endCount++;
                     }
                     if (selectedType == VertexType.Heavy)
@@ -192,7 +205,7 @@ namespace AStarVisualizer
             {
 
                 Point pos = new Point(x, y);
-                
+
                 DataToPoint(ref pos);
 
                 Color color = bitmap.GetPixel(pos.X + 1, pos.Y + 1);
@@ -300,11 +313,15 @@ namespace AStarVisualizer
             Vertex<Point> vertex = new Vertex<Point>(new Point(0, 0));
 
             int heuristicsChoice = HeuristicDropDown.SelectedIndex;
+            PathFinding.Result result;
+
+            if (HeuristicDropDown.SelectedIndex == HeuristicDropDown.Items.Count - 1)
+            {
+                result = PathFinding.BellmanFord(out data, out path, graph, Start, End);
+            }
 
 
-
-
-            PathFinding.Result result = PathFinding.AStar(out data, out path, graph, Start.Value, End.Value, PathFinding.Heuristics((HeuristicsChoices)heuristicsChoice));
+            result = PathFinding.Astar(out data, out path, Start, End, PathFinding.Heuristics((HeuristicsChoices)heuristicsChoice));
 
             if (result == PathFinding.Result.Found)
             {
@@ -313,33 +330,21 @@ namespace AStarVisualizer
         }
         private void PointToData(ref Point pos)
         {
-            if (pos.X <= 380)
-            {
-                pos.X = pos.X - (pos.X % (size));
-            }
-            else
-            {
-                pos.X = pos.X - (pos.X % (size)) + size;
-            }
-            if (pos.Y <= 380)
-            {
-                pos.Y = pos.Y - (pos.Y % (size));
-            }
-            else
-            {
-                pos.Y = pos.Y - (pos.Y % (size)) + size;
-            }
-            //pos = new Point(pos.X * 20 / 19, pos.Y * 20 / 19);
 
-            //if (pos.X == 400)
-            //{
-            //    pos.X -= 20;
-            //}
-            //if (pos.Y == 400)
-            //{
-            //    pos.Y -= 20;
-            //}
 
+
+            pos.X = pos.X - pos.X % size - (pos.X / (size + 1) / size) * size;
+
+            pos.Y = pos.Y - pos.Y % size - (pos.Y / (size + 1) / size) * size;
+
+            //if (pos.X == 399)
+            //{
+            //    pos.X -= 19;
+            //}
+            //if (pos.Y == 399)
+            //{
+            //    pos.Y -= 19;
+            //}
 
         }
         private void DataToPoint(ref Point pos)

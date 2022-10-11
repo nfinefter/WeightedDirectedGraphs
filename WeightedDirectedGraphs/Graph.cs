@@ -15,7 +15,8 @@ namespace WeightedDirectedGraphs
         Manhattan,
         Diagonal,
         Euclidean,
-        Dijkstra
+        Dijkstra,
+        BellmanFord
     }
     public class Graph<T>
     {
