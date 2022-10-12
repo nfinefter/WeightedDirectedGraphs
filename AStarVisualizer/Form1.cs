@@ -75,7 +75,6 @@ namespace AStarVisualizer
                 gfx.DrawLine(Pens.Black, new Point(0, i), new Point(graphWidth, i));
             }
 
-            Brush temp = Brushes.Red;
             //4 Connections
             for (int X = 0; X <= graphWidth / 20 * size - size; X += size)
             {
@@ -83,15 +82,7 @@ namespace AStarVisualizer
                 {
  
                     graph.AddVertex(new Vertex<Point>(new Point(X, Y)));
-                    if ((X / size % 2 + Y / size) % 2 == 0)
-                    {
-                        temp = Brushes.Red;
-                    }
-                    else
-                    {
-                        temp = Brushes.Yellow;
-                    }
-                    gfx.FillRectangle(temp, new Rectangle(X + X / size, Y + Y / size, size, size));
+
                     AddEdges(new Point(X, Y), size);
           
                 }

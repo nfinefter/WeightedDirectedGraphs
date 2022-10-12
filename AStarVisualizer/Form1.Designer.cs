@@ -63,7 +63,7 @@
             this.GraphVisual.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.GraphVisual.Location = new System.Drawing.Point(200, 25);
             this.GraphVisual.Name = "GraphVisual";
-            this.GraphVisual.Size = new System.Drawing.Size(420, 420);
+            this.GraphVisual.Size = new System.Drawing.Size(400, 400);
             this.GraphVisual.TabIndex = 1;
             this.GraphVisual.TabStop = false;
             this.GraphVisual.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseClick);
