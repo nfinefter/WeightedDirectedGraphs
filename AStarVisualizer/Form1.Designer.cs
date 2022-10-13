@@ -136,8 +136,7 @@
             "Manhattan",
             "Diagonal",
             "Euclidean",
-            "Dijkstra",
-            "BellmanFord"});
+            "Dijkstra"});
             this.HeuristicDropDown.Location = new System.Drawing.Point(705, 185);
             this.HeuristicDropDown.Name = "HeuristicDropDown";
             this.HeuristicDropDown.Size = new System.Drawing.Size(83, 23);

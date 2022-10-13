@@ -1,4 +1,5 @@
 ﻿using Heap_Tree;
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace WeightedDirectedGraphs
             InvalidPos
         }
 
-        static Heuristic[] heuristicArray = new Heuristic[] { Manhattan, Diagonal, Euclidean, Identity};
+        static Heuristic[] heuristicArray = new Heuristic[] { Manhattan, Diagonal, Euclidean, Identity };
 
         public static Func<Point, Point, float> Heuristics(HeuristicsChoices heuristicsChoices)
         {
@@ -50,38 +51,19 @@ namespace WeightedDirectedGraphs
             return 1 * (float)Math.Sqrt(dx * dx + dy * dy);
         }
 
-        public static Result BellmanFord(out List<AStarInfo> data, out List<Vertex<Point>> path, Graph<Point> graph, Vertex<Point> start, Vertex<Point> end)
+        public static HashSet<Edge<Point>> BellmanCycleExist(Graph<Point> graph)
         {
-            data = new List<AStarInfo>();
+            //Turn BellmanCycle into HashSet Return.
+            Heap<Vertex<Point>> queue = new Heap<Vertex<Point>>(5);
 
-            Queue<Vertex<Point>> queue = new Queue<Vertex<Point>>();
-
-            if (end == null || start == null)
+            for (int i = 0; i < graph.VertexCount; i++)
             {
-                path = null;
-                return Result.InvalidPos;
+                queue.Push(graph.Vertices[i]);
             }
 
-            for (int i = 0; i < graph.Vertices.Count; i++)
+            while (true)
             {
-                queue.Enqueue(graph.Vertices[i]);
-                graph.Vertices[i].Founder = null;
-                graph.Vertices[i].CumulativeDistance = float.PositiveInfinity;
-            }
-
-            Vertex<Point> vertex = queue.Dequeue();
-            vertex.CumulativeDistance = 0;
-
-            path = new List<Vertex<Point>>();
-
-            while (end.Visited == false)
-            {
-                if (queue.Count == 0)
-                {
-                    return Result.NotFound;
-                }
-
-                data.Add(new AStarInfo(ColorToBrush.Visited, vertex.Value));
+                Vertex<Point> vertex = queue.Pop();
 
                 for (int i = 0; i < vertex.NeighborCount; i++)
                 {
@@ -95,37 +77,29 @@ namespace WeightedDirectedGraphs
 
                             vertex.Neighbors[i].EndingPoint.Founder = vertex;
                         }
-                        if (vertex.CumulativeDistance.CompareTo(tentDist) > 0)
+                    }
+                }
+
+                for (int j = 0; j < graph.VertexCount; j++)
+                {
+                    vertex = graph.Vertices[j];
+                    for (int i = 0; i < vertex.NeighborCount; i++)
+                    {
+                        float tentDist = vertex.Neighbors[i].Weight + vertex.CumulativeDistance;
+
+                        if (tentDist.CompareTo(vertex.Neighbors[i].EndingPoint.CumulativeDistance) < 0)
                         {
-                            end.Visited = true;
+                            return true;
                         }
                     }
                 }
 
-                vertex.Visited = true;
-            }
-
-            if (end.Visited == true)
-            {
-                Vertex<Point> finder = end;
-
-                while (finder.Founder != null)
+                if (queue.Count == 0)
                 {
-                    path.Add(finder);
-
-                    finder = finder.Founder;
-                }
-                path.Add(finder);
-                path.Reverse();
-                for (int i = 0; i < path.Count; i++)
-                {
-                    data.Add(new AStarInfo(ColorToBrush.FinalPath, path[i].Value));
+                    return false;
                 }
             }
-
-            return Result.Found;
         }
-
 
         public static Result Astar(out List<AStarInfo> data, out List<Vertex<Point>> path, Vertex<Point> Start, Vertex<Point> End, Heuristic heuristic)
         {

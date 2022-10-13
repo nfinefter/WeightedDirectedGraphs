@@ -8,11 +8,11 @@ namespace AStarVisualizer
 {
     public partial class Form1 : Form
     {
-        static Vertex<Point> ChonkyVert;
 
         Bitmap bitmap;
         Graphics gfx;
         Graph<Point> graph = new Graph<Point>();
+        Graph<Point> cycleGraph = new Graph<Point>();
         VertexType selectedType;
         int startCount = 0;
         int endCount = 0;
@@ -21,7 +21,6 @@ namespace AStarVisualizer
         Vertex<Point> End;
         List<Vertex<Point>> path = new List<Vertex<Point>>();
         List<AStarInfo> data;
-        int TraversalCount = 0;
         int graphWidth = 0;
         int graphHeight = 0;
         int Count = 0;
@@ -39,8 +38,6 @@ namespace AStarVisualizer
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-            //Last row on right should not be filled check for extra drawing.
-            //Ignores the whole right and bottom row/column
             HeuristicDropDown.SelectedIndex = 0;
             graphWidth += 400;//GraphVisual.Width;
             graphHeight += 400;//GraphVisual.Height;
@@ -87,6 +84,20 @@ namespace AStarVisualizer
           
                 }
             }
+
+            Vertex<Point> a = new Vertex<Point>(new Point(0, 0));
+            Vertex<Point> b = new Vertex<Point>(new Point(0, 1));
+            Vertex<Point> c = new Vertex<Point>(new Point(1, 0));
+
+            cycleGraph.AddVertex(a);
+            cycleGraph.AddVertex(b);
+            cycleGraph.AddVertex(c);
+
+            cycleGraph.AddEdge(a, b, -1);
+            cycleGraph.AddEdge(b, c, 1);
+            //cycleGraph.AddEdge(c, a, -1);
+
+            bool cycleExist = PathFinding.BellmanCycleExist(cycleGraph);
 
             GraphVisual.Image = bitmap;
         }
@@ -185,7 +196,6 @@ namespace AStarVisualizer
                         PointToData(ref pos);
                         RemoveEdges(pos);
                         AddEdges(pos, (size * 20));
-                        ChonkyVert = graph.Search(pos);
                     }
                 }
 
@@ -305,12 +315,6 @@ namespace AStarVisualizer
 
             int heuristicsChoice = HeuristicDropDown.SelectedIndex;
             PathFinding.Result result;
-
-            if (HeuristicDropDown.SelectedIndex == HeuristicDropDown.Items.Count - 1)
-            {
-                result = PathFinding.BellmanFord(out data, out path, graph, Start, End);
-            }
-
 
             result = PathFinding.Astar(out data, out path, Start, End, PathFinding.Heuristics((HeuristicsChoices)heuristicsChoice));
 
