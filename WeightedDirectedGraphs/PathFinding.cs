@@ -56,6 +56,8 @@ namespace WeightedDirectedGraphs
             //Turn BellmanCycle into HashSet Return.
             Heap<Vertex<Point>> queue = new Heap<Vertex<Point>>(5);
 
+            HashSet<Edge<Point>> visited = new HashSet<Edge<Point>>();
+
             for (int i = 0; i < graph.VertexCount; i++)
             {
                 queue.Push(graph.Vertices[i]);
@@ -89,14 +91,20 @@ namespace WeightedDirectedGraphs
 
                         if (tentDist.CompareTo(vertex.Neighbors[i].EndingPoint.CumulativeDistance) < 0)
                         {
-                            return true;
+                            for (int k = 0; k < vertex.NeighborCount; k++)
+                            {
+                                visited.Add(vertex.Neighbors[i]);
+                            }
+                            return visited;
                         }
                     }
                 }
 
                 if (queue.Count == 0)
                 {
-                    return false;
+                    //Only returning empty hashset
+                    //No negative cycle?
+                    return visited;
                 }
             }
         }

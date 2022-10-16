@@ -95,9 +95,9 @@ namespace AStarVisualizer
 
             cycleGraph.AddEdge(a, b, -1);
             cycleGraph.AddEdge(b, c, 1);
-            //cycleGraph.AddEdge(c, a, -1);
+            cycleGraph.AddEdge(c, a, -1);
 
-            bool cycleExist = PathFinding.BellmanCycleExist(cycleGraph);
+            HashSet<Edge<Point>> cycleExist = PathFinding.BellmanCycleExist(cycleGraph);
 
             GraphVisual.Image = bitmap;
         }
