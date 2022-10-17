@@ -39,8 +39,8 @@ namespace AStarVisualizer
         private void Form1_Load(object sender, EventArgs e)
         {
             HeuristicDropDown.SelectedIndex = 0;
-            graphWidth += 400;//GraphVisual.Width;
-            graphHeight += 400;//GraphVisual.Height;
+            graphWidth += GraphVisual.Width;
+            graphHeight += GraphVisual.Height;
 
             bitmap = new Bitmap(GraphVisual.Width, GraphVisual.Height);
             gfx = Graphics.FromImage(bitmap);
