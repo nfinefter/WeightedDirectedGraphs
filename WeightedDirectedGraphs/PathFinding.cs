@@ -90,11 +90,7 @@ namespace WeightedDirectedGraphs
                         float tentDist = vertex.Neighbors[i].Weight + vertex.CumulativeDistance;
 
                         if (tentDist.CompareTo(vertex.Neighbors[i].EndingPoint.CumulativeDistance) < 0)
-                        {
-                            for (int k = 0; k < vertex.NeighborCount; k++)
-                            {
-                                visited.Add(vertex.Neighbors[i]);
-                            }
+                        {        
                             return visited;
                         }
                     }
@@ -102,8 +98,13 @@ namespace WeightedDirectedGraphs
 
                 if (queue.Count == 0)
                 {
-                    //Only returning empty hashset
-                    //No negative cycle?
+                    //Logic on how to add all vertices of negative cycle
+
+                    for (int i = 0; i < vertex.NeighborCount; i++)
+                    {
+                        visited.Add(vertex.Neighbors[i]);
+                    }
+
                     return visited;
                 }
             }
