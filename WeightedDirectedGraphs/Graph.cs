@@ -247,6 +247,8 @@ namespace WeightedDirectedGraphs
        
         public List<Vertex<T>> Djikstra(Vertex<T> start, Vertex<T> end)
         {
+            HashSet<Edge<T>> cycleNodes = PathFinding.GetCycle(this);
+
             Heap<Vertex<T>> queue = new Heap<Vertex<T>>(5);
 
             List<Vertex<T>> path = new List<Vertex<T>>();
@@ -266,7 +268,7 @@ namespace WeightedDirectedGraphs
 
                 for (int i = 0; i < vertex.NeighborCount; i++)
                 {
-                    if (vertex.Neighbors[i].EndingPoint.Visited != true)
+                    if (vertex.Neighbors[i].EndingPoint.Visited != true && !cycleNodes.Contains(vertex.Neighbors[i]))
                     {
                         float tentDist = vertex.CumulativeDistance + vertex.Neighbors[i].Weight;
 

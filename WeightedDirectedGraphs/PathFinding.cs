@@ -51,63 +51,79 @@ namespace WeightedDirectedGraphs
             return 1 * (float)Math.Sqrt(dx * dx + dy * dy);
         }
 
-        public static HashSet<Edge<Point>> BellmanCycleExist(Graph<Point> graph)
+        public static HashSet<Edge<T>> GetCycle<T>(Graph<T> graph)
         {
-            //Turn BellmanCycle into HashSet Return.
-            Heap<Vertex<Point>> queue = new Heap<Vertex<Point>>(5);
+            Heap<Vertex<T>> queue = new Heap<Vertex<T>>(5);
 
-            HashSet<Edge<Point>> visited = new HashSet<Edge<Point>>();
+            HashSet<Edge<T>> visited = new HashSet<Edge<T>>();
 
-            for (int i = 0; i < graph.VertexCount; i++)
+            for (int j = 0; j < graph.VertexCount; j++)
             {
-                queue.Push(graph.Vertices[i]);
-            }
-
-            while (true)
-            {
-                Vertex<Point> vertex = queue.Pop();
-
-                for (int i = 0; i < vertex.NeighborCount; i++)
+                foreach (var vert in graph.Vertices)
                 {
-                    if (vertex.Neighbors[i].EndingPoint.Visited != true)
+                    vert.Visited = false;
+                    vert.CumulativeDistance = float.PositiveInfinity;
+                }
+                graph.Vertices[j].CumulativeDistance = 0;
+                queue.Push(graph.Vertices[j]);
+
+                while (queue.Count > 0)
+                {
+                    Vertex<T> vertex = queue.Pop();
+                    vertex.Visited = true;
+
+                    for (int i = 0; i < vertex.NeighborCount; i++)
                     {
                         float tentDist = vertex.CumulativeDistance + vertex.Neighbors[i].Weight;
-
-                        if (tentDist.CompareTo(vertex.Neighbors[i].EndingPoint.CumulativeDistance) < 0)
+                        if (vertex.Neighbors[i].EndingPoint.Visited != true)
                         {
-                            vertex.Neighbors[i].EndingPoint.CumulativeDistance = tentDist;
+                            if (tentDist.CompareTo(vertex.Neighbors[i].EndingPoint.CumulativeDistance) < 0)
+                            {
+                                if (float.IsPositiveInfinity(vertex.Neighbors[i].EndingPoint.CumulativeDistance))
+                                {
+                                    queue.Push(vertex.Neighbors[i].EndingPoint);
+                                }
+                                else
+                                {
+                                    queue.HeapifyUp(queue.Find(vertex.Neighbors[i].EndingPoint));
+                                }
+                                vertex.Neighbors[i].EndingPoint.CumulativeDistance = tentDist;
 
-                            vertex.Neighbors[i].EndingPoint.Founder = vertex;
+                                vertex.Neighbors[i].EndingPoint.Founder = vertex;
+                            }
+                        }
+                        else
+                        {
+                            if (vertex.Neighbors[i].EndingPoint.CumulativeDistance > tentDist)
+                            {
+                                if (!visited.Contains(vertex.Neighbors[i]))
+                                {
+                                    visited.Add(vertex.Neighbors[i]);
+                                }
+                            }
                         }
                     }
-                }
-
-                for (int j = 0; j < graph.VertexCount; j++)
-                {
-                    vertex = graph.Vertices[j];
-                    for (int i = 0; i < vertex.NeighborCount; i++)
-                    {
-                        float tentDist = vertex.Neighbors[i].Weight + vertex.CumulativeDistance;
-
-                        if (tentDist.CompareTo(vertex.Neighbors[i].EndingPoint.CumulativeDistance) < 0)
-                        {        
-                            return visited;
-                        }
-                    }
-                }
-
-                if (queue.Count == 0)
-                {
-                    //Logic on how to add all vertices of negative cycle
-
-                    for (int i = 0; i < vertex.NeighborCount; i++)
-                    {
-                        visited.Add(vertex.Neighbors[i]);
-                    }
-
-                    return visited;
                 }
             }
+
+
+  
+
+            //for (int j = 0; j < graph.VertexCount; j++)
+            //{
+            //    Vertex<Point> vertex = graph.Vertices[j];
+            //    for (int i = 0; i < vertex.NeighborCount; i++)
+            //    {
+            //        float tentDist = vertex.Neighbors[i].Weight + vertex.CumulativeDistance;
+
+            //        if (tentDist.CompareTo(vertex.Neighbors[i].EndingPoint.CumulativeDistance) < 0)
+            //        {
+            //            visited.Add(vertex.Neighbors[i]);
+            //        }
+            //    }
+            //}
+
+            return visited;
         }
 
         public static Result Astar(out List<AStarInfo> data, out List<Vertex<Point>> path, Vertex<Point> Start, Vertex<Point> End, Heuristic heuristic)

@@ -44,10 +44,9 @@
             // 
             // startButton
             // 
-            this.startButton.Location = new System.Drawing.Point(806, 53);
-            this.startButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.startButton.Location = new System.Drawing.Point(705, 40);
             this.startButton.Name = "startButton";
-            this.startButton.Size = new System.Drawing.Size(95, 31);
+            this.startButton.Size = new System.Drawing.Size(83, 23);
             this.startButton.TabIndex = 0;
             this.startButton.Text = "CreateGrid";
             this.startButton.UseVisualStyleBackColor = true;
@@ -62,8 +61,7 @@
             // 
             this.GraphVisual.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.GraphVisual.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.GraphVisual.Location = new System.Drawing.Point(229, 33);
-            this.GraphVisual.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.GraphVisual.Location = new System.Drawing.Point(200, 25);
             this.GraphVisual.Name = "GraphVisual";
             this.GraphVisual.Size = new System.Drawing.Size(400, 400);
             this.GraphVisual.TabIndex = 1;
@@ -72,10 +70,9 @@
             // 
             // artButton
             // 
-            this.artButton.Location = new System.Drawing.Point(-1, 589);
-            this.artButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.artButton.Location = new System.Drawing.Point(-1, 442);
             this.artButton.Name = "artButton";
-            this.artButton.Size = new System.Drawing.Size(11, 13);
+            this.artButton.Size = new System.Drawing.Size(10, 10);
             this.artButton.TabIndex = 2;
             this.artButton.Text = "Art";
             this.artButton.UseVisualStyleBackColor = true;
@@ -83,10 +80,9 @@
             // 
             // WallButton
             // 
-            this.WallButton.Location = new System.Drawing.Point(806, 92);
-            this.WallButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.WallButton.Location = new System.Drawing.Point(705, 69);
             this.WallButton.Name = "WallButton";
-            this.WallButton.Size = new System.Drawing.Size(95, 31);
+            this.WallButton.Size = new System.Drawing.Size(83, 23);
             this.WallButton.TabIndex = 3;
             this.WallButton.Text = "Wall";
             this.WallButton.UseVisualStyleBackColor = true;
@@ -94,10 +90,9 @@
             // 
             // StartVertexButton
             // 
-            this.StartVertexButton.Location = new System.Drawing.Point(806, 131);
-            this.StartVertexButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.StartVertexButton.Location = new System.Drawing.Point(705, 98);
             this.StartVertexButton.Name = "StartVertexButton";
-            this.StartVertexButton.Size = new System.Drawing.Size(95, 31);
+            this.StartVertexButton.Size = new System.Drawing.Size(83, 23);
             this.StartVertexButton.TabIndex = 4;
             this.StartVertexButton.Text = "StartVertex";
             this.StartVertexButton.UseVisualStyleBackColor = true;
@@ -105,10 +100,9 @@
             // 
             // EndVertexButton
             // 
-            this.EndVertexButton.Location = new System.Drawing.Point(806, 169);
-            this.EndVertexButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.EndVertexButton.Location = new System.Drawing.Point(705, 127);
             this.EndVertexButton.Name = "EndVertexButton";
-            this.EndVertexButton.Size = new System.Drawing.Size(95, 31);
+            this.EndVertexButton.Size = new System.Drawing.Size(83, 23);
             this.EndVertexButton.TabIndex = 5;
             this.EndVertexButton.Text = "EndVertex";
             this.EndVertexButton.UseVisualStyleBackColor = true;
@@ -116,10 +110,9 @@
             // 
             // HeavyVertexButton
             // 
-            this.HeavyVertexButton.Location = new System.Drawing.Point(806, 208);
-            this.HeavyVertexButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.HeavyVertexButton.Location = new System.Drawing.Point(705, 156);
             this.HeavyVertexButton.Name = "HeavyVertexButton";
-            this.HeavyVertexButton.Size = new System.Drawing.Size(95, 31);
+            this.HeavyVertexButton.Size = new System.Drawing.Size(83, 23);
             this.HeavyVertexButton.TabIndex = 6;
             this.HeavyVertexButton.Text = "HeavyVertex";
             this.HeavyVertexButton.UseVisualStyleBackColor = true;
@@ -127,10 +120,9 @@
             // 
             // BeginButton
             // 
-            this.BeginButton.Location = new System.Drawing.Point(806, 15);
-            this.BeginButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.BeginButton.Location = new System.Drawing.Point(705, 11);
             this.BeginButton.Name = "BeginButton";
-            this.BeginButton.Size = new System.Drawing.Size(95, 31);
+            this.BeginButton.Size = new System.Drawing.Size(83, 23);
             this.BeginButton.TabIndex = 7;
             this.BeginButton.Text = "Begin AStar";
             this.BeginButton.UseVisualStyleBackColor = true;
@@ -145,18 +137,17 @@
             "Diagonal",
             "Euclidean",
             "Dijkstra"});
-            this.HeuristicDropDown.Location = new System.Drawing.Point(806, 247);
-            this.HeuristicDropDown.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.HeuristicDropDown.Location = new System.Drawing.Point(705, 185);
             this.HeuristicDropDown.Name = "HeuristicDropDown";
-            this.HeuristicDropDown.Size = new System.Drawing.Size(94, 28);
+            this.HeuristicDropDown.Size = new System.Drawing.Size(83, 23);
             this.HeuristicDropDown.TabIndex = 9;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.ClientSize = new System.Drawing.Size(914, 600);
+            this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.HeuristicDropDown);
             this.Controls.Add(this.BeginButton);
             this.Controls.Add(this.HeavyVertexButton);
@@ -166,7 +157,6 @@
             this.Controls.Add(this.artButton);
             this.Controls.Add(this.GraphVisual);
             this.Controls.Add(this.startButton);
-            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);

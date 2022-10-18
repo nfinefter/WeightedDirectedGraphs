@@ -39,6 +39,8 @@ namespace AStarVisualizer
         private void Form1_Load(object sender, EventArgs e)
         {
             HeuristicDropDown.SelectedIndex = 0;
+            GraphVisual.Width = 400;
+            GraphVisual.Height = 400;
             graphWidth += GraphVisual.Width;
             graphHeight += GraphVisual.Height;
 
@@ -97,7 +99,7 @@ namespace AStarVisualizer
             cycleGraph.AddEdge(b, c, 1);
             cycleGraph.AddEdge(c, a, -1);
 
-            HashSet<Edge<Point>> cycleExist = PathFinding.BellmanCycleExist(cycleGraph);
+            HashSet<Edge<Point>> cycleExist = PathFinding.GetCycle(cycleGraph);
 
             GraphVisual.Image = bitmap;
         }
