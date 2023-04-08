@@ -10,6 +10,7 @@ using System.Xml.Linq;
 
 namespace WeightedDirectedGraphs
 {
+
     public enum HeuristicsChoices
     {
         Manhattan,
@@ -23,6 +24,12 @@ namespace WeightedDirectedGraphs
         private List<Vertex<T>> vertices = new List<Vertex<T>>();
 
         public IReadOnlyList<Vertex<T>> Vertices => vertices;
+
+        public Vertex<T> this[int index]
+        {
+            get { return vertices[index]; }
+        }
+
         public IReadOnlyList<Edge<T>> Edges
         {
             get
@@ -50,7 +57,6 @@ namespace WeightedDirectedGraphs
 
         public Graph()
         {
-
         }
         
         public void AddVertex(Vertex<T> vertex)
