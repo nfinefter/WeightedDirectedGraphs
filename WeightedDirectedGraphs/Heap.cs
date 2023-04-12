@@ -129,9 +129,9 @@ namespace Heap_Tree
         }
         public int Find(T item)
         {
-            for (int i = 0; i < items.Length; i++)
+            for (int i = 0; i < Count; i++)
             {
-                if (items.Equals(item))
+                if (items[i].Equals(item))
                 {
                     return i;
                 }

@@ -13,8 +13,21 @@ namespace WeightedDirectedGraphs
 
         public int NeighborCount => Neighbors.Count;
         public Vertex<T> Founder = null;
-        public bool Visited = false;
-        public float CumulativeDistance = float.PositiveInfinity;
+        bool visited = false;
+        public bool Visited { get => visited; set 
+            {
+                visited = value;
+                if (visited == false && !float.IsInfinity(CumulativeDistance))
+                {
+                    ;
+                }
+            } 
+        }
+        private float cumulativeDistance = float.PositiveInfinity;
+        public float CumulativeDistance { get => cumulativeDistance; set { if (value == 1048) 
+                    ;
+                cumulativeDistance = value; 
+            } }
         public float FinalDistance = float.PositiveInfinity;
         public Vertex(T value) 
         {

@@ -21,7 +21,7 @@ namespace WeightedDirectedGraphs
     }
     public class Graph<T>
     {
-        private List<Vertex<T>> vertices = new List<Vertex<T>>();
+        internal List<Vertex<T>> vertices = new List<Vertex<T>>();
 
         public IReadOnlyList<Vertex<T>> Vertices => vertices;
 
@@ -308,7 +308,7 @@ namespace WeightedDirectedGraphs
             {
                 Vertex<T> finder = end;
 
-                while (finder != null)
+                while (finder != null && !path.Contains(finder))
                 {
                     path.Add(finder);
                     finder = finder.Founder;

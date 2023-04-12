@@ -61,8 +61,8 @@ namespace WeightedDirectedGraphs
             {
                 foreach (var vert in graph.Vertices)
                 {
-                    vert.Visited = false;
                     vert.CumulativeDistance = float.PositiveInfinity;
+                    vert.Visited = false;
                 }
                 graph.Vertices[j].CumulativeDistance = 0;
                 queue.Push(graph.Vertices[j]);
@@ -79,9 +79,11 @@ namespace WeightedDirectedGraphs
                         {
                             if (tentDist.CompareTo(vertex.Neighbors[i].EndingPoint.CumulativeDistance) < 0)
                             {
+                                bool pushed = false;
                                 if (float.IsPositiveInfinity(vertex.Neighbors[i].EndingPoint.CumulativeDistance))
                                 {
                                     queue.Push(vertex.Neighbors[i].EndingPoint);
+                                    pushed= true;
                                 }
                                 else
                                 {
