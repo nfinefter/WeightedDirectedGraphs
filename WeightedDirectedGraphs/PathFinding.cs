@@ -38,13 +38,13 @@ namespace WeightedDirectedGraphs
             float dy = Math.Abs(start.Y - end.Y);
             return 1 * (dx + dy);
         }
-        static float Diagonal(Point start, Point end)
+        public static float Diagonal(Point start, Point end)
         {
             float dx = Math.Abs(start.X - end.X);
             float dy = Math.Abs(start.Y - end.Y);
             return 1 * (dx + dy) + (1 - 2 * 1) * Math.Min(dx, dy);
         }
-        static float Euclidean(Point start, Point end)
+        public static float Euclidean(Point start, Point end)
         {
             float dx = Math.Abs(start.X - end.X);
             float dy = Math.Abs(start.Y - end.Y);
