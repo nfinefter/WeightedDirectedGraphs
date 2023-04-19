@@ -79,11 +79,9 @@ namespace WeightedDirectedGraphs
                         {
                             if (tentDist.CompareTo(vertex.Neighbors[i].EndingPoint.CumulativeDistance) < 0)
                             {
-                                bool pushed = false;
                                 if (float.IsPositiveInfinity(vertex.Neighbors[i].EndingPoint.CumulativeDistance))
                                 {
                                     queue.Push(vertex.Neighbors[i].EndingPoint);
-                                    pushed= true;
                                 }
                                 else
                                 {
